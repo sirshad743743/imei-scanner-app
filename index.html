@@ -1,0 +1,1423 @@
+<!--
+================================================================================
+IMEI SCANNER PRO - WITH MODEL SECTION
+================================================================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mohsin IMEI Scanner Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --primary-light: #818cf8;
+      --success: #10b981;
+      --success-dark: #059669;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --dark: #0f172a;
+      --dark-light: #1e293b;
+      --gray: #64748b;
+      --gray-light: #cbd5e1;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --shadow: 0 10px 40px rgba(0,0,0,0.08);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+      --border-radius: 16px;
+      --border-radius-lg: 24px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    html, body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+      pointer-events: none;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+      animation: fadeInDown 0.6s ease;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.9);
+      font-weight: 500;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 32px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 25px 70px rgba(0,0,0,0.2);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      font-weight: 600;
+      padding: 14px 28px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+      box-shadow: 0 4px 15px rgba(100, 116, 139, 0.3);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--success) 0%, var(--success-dark) 100%);
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-warning {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+    }
+
+    #barcodeScannerSection {
+      position: relative;
+      animation: fadeIn 0.4s ease;
+    }
+
+    #barcodeScanner {
+      width: 100%;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      position: relative;
+    }
+
+    #barcodeScanner video,
+    #barcodeScanner canvas {
+      width: 100% !important;
+      height: auto !important;
+      max-height: 400px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    }
+
+    .barcode-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .barcode-target {
+      border: 4px solid var(--success);
+      width: 80%;
+      max-width: 400px;
+      height: 100px;
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+      animation: barcodePulse 2s infinite;
+      position: relative;
+    }
+
+    .barcode-corner-tl,
+    .barcode-corner-tr,
+    .barcode-corner-bl,
+    .barcode-corner-br {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border: 5px solid var(--success);
+    }
+
+    .barcode-corner-tl { top: -5px; left: -5px; border-right: 0; border-bottom: 0; border-radius: 16px 0 0 0; }
+    .barcode-corner-tr { top: -5px; right: -5px; border-left: 0; border-bottom: 0; border-radius: 0 16px 0 0; }
+    .barcode-corner-bl { bottom: -5px; left: -5px; border-right: 0; border-top: 0; border-radius: 0 0 0 16px; }
+    .barcode-corner-br { bottom: -5px; right: -5px; border-left: 0; border-top: 0; border-radius: 0 0 16px 0; }
+
+    @keyframes barcodePulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.02); opacity: 0.9; }
+    }
+
+    .barcode-status {
+      margin-top: 20px;
+      background: rgba(16, 185, 129, 0.9);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .barcode-status.scanning {
+      background: rgba(99, 102, 241, 0.9);
+      animation: blink 1.5s infinite;
+    }
+
+    .barcode-status.detected {
+      background: rgba(16, 185, 129, 0.9);
+      animation: none;
+    }
+
+    @keyframes blink {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0.7; }
+    }
+
+    .input, .select {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 2px solid var(--gray-light);
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      background: white;
+      margin-bottom: 16px;
+    }
+
+    .input:focus, .select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--dark);
+      font-size: 0.9rem;
+    }
+
+    video {
+      width: 100%;
+      border-radius: var(--border-radius);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+      max-height: 400px;
+      object-fit: cover;
+    }
+
+    .camera-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .target-box {
+      border: 4px solid var(--primary);
+      width: 280px;
+      height: 80px;
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.02); opacity: 0.8; }
+    }
+
+    .camera-hint {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(99, 102, 241, 0.9);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+    }
+
+    #imgCanvas {
+      width: 100%;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      max-height: 250px;
+    }
+
+    .info, .error, .success {
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .info {
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      color: #1e40af;
+      border-left: 4px solid #3b82f6;
+    }
+
+    .error {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      color: #991b1b;
+      border-left: 4px solid var(--danger);
+    }
+
+    .success {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      color: #065f46;
+      border-left: 4px solid var(--success);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .dashboard-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.9rem;
+    }
+
+    .dashboard-table thead {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+    }
+
+    .dashboard-table th {
+      padding: 16px;
+      text-align: left;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    .dashboard-table th:first-child { border-top-left-radius: var(--border-radius); }
+    .dashboard-table th:last-child { border-top-right-radius: var(--border-radius); }
+
+    .dashboard-table tbody tr {
+      background: white;
+      transition: all 0.2s ease;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .dashboard-table tbody tr:hover {
+      background: #f8fafc;
+      transform: scale(1.01);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .dashboard-table td {
+      padding: 16px;
+      color: var(--dark);
+    }
+
+    .dashboard-table code {
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+
+    .thumbnail {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .thumbnail:hover {
+      transform: scale(1.5);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      z-index: 100;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.3rem;
+      transition: transform 0.2s ease;
+      padding: 6px;
+    }
+
+    .action-btn:hover {
+      transform: scale(1.2);
+    }
+
+    #pagination {
+      display: flex;
+      gap: 8px;
+      margin-top: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    #pagination button {
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 2px solid var(--gray-light);
+      background: white;
+      color: var(--dark);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+    #pagination button:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(8px);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content {
+      background: white;
+      margin: 5% auto;
+      padding: 40px;
+      border-radius: var(--border-radius-lg);
+      width: 90%;
+      max-width: 500px;
+      box-shadow: var(--shadow-lg);
+      animation: slideUp 0.4s ease;
+      position: relative;
+    }
+
+    .close-modal {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      color: var(--gray);
+      transition: color 0.3s ease;
+      line-height: 1;
+    }
+
+    .close-modal:hover {
+      color: var(--danger);
+    }
+
+    .modal h3 {
+      font-size: 1.8rem;
+      margin-bottom: 24px;
+      color: var(--dark);
+      font-weight: 700;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 300px;
+      padding: 18px 24px;
+      background: var(--dark);
+      color: white;
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      z-index: 99999;
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: none;
+      animation: slideUpToast 0.4s ease;
+    }
+
+    .lds-ring {
+      display: inline-block;
+      position: relative;
+      width: 48px;
+      height: 48px;
+    }
+
+    .lds-ring div {
+      box-sizing: border-box;
+      display: block;
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      margin: 4px;
+      border: 4px solid var(--primary);
+      border-radius: 50%;
+      animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      border-color: var(--primary) transparent transparent transparent;
+    }
+
+    .lds-ring div:nth-child(1) { animation-delay: -0.45s; }
+    .lds-ring div:nth-child(2) { animation-delay: -0.3s; }
+    .lds-ring div:nth-child(3) { animation-delay: -0.15s; }
+
+    @keyframes lds-ring {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUpToast {
+      from { opacity: 0; transform: translate(-50%, 20px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 20px 16px; }
+      .card { padding: 20px; }
+      .header h1 { font-size: 1.8rem; }
+      .btn-group { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
+      .dashboard-table { font-size: 0.8rem; }
+      .dashboard-table th, .dashboard-table td { padding: 10px 8px; }
+      .modal-content { padding: 24px; margin: 20% auto; }
+      .barcode-target { width: 90%; height: 80px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toast" id="toast"></div>
+  
+  <div class="container">
+    <div class="header">
+      <h1>📱 Mohsin IMEI Scanner Pro</h1>
+      <p>Mohsin IMEI Management with Barcode Scanner</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>🔍</span>
+          Scanner Tools
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-warning" id="barcodeScanBtn">
+          <span>📊</span>
+          Barcode Scanner
+        </button>
+        <button class="btn" id="scanBtn">
+          <span>📷</span>
+          OCR Scan
+        </button>
+        <button class="btn btn-secondary" id="uploadBtn">
+          <span>📁</span>
+          Upload
+        </button>
+        <button class="btn btn-success" id="manualBtn">
+          <span>✍️</span>
+          Manual
+        </button>
+        <button class="btn btn-secondary" id="exportBtn">
+          <span>📥</span>
+          Export CSV
+        </button>
+      </div>
+
+      <div id="barcodeScannerSection" style="display:none;">
+        <div style="position:relative;">
+          <div id="barcodeScanner"></div>
+          <div class="barcode-overlay">
+            <div class="barcode-target">
+              <div class="barcode-corner-tl"></div>
+              <div class="barcode-corner-tr"></div>
+              <div class="barcode-corner-bl"></div>
+              <div class="barcode-corner-br"></div>
+            </div>
+            <div class="barcode-status scanning" id="barcodeStatus">
+              🔍 Scanning for barcode...
+            </div>
+          </div>
+        </div>
+        <div class="btn-group" style="margin-top:16px;">
+          <button class="btn btn-secondary" id="closeBarcodeBtn">
+            <span>✖️</span>
+            Close Scanner
+          </button>
+        </div>
+      </div>
+
+      <div id="cameraSection" style="display:none;">
+        <div style="position:relative;">
+          <video id="cameraPreview" autoplay playsinline></video>
+          <div class="camera-overlay">
+            <div class="target-box"></div>
+          </div>
+          <span class="camera-hint">Place IMEI label inside the box</span>
+        </div>
+        <div class="btn-group" style="margin-top:16px;">
+          <button class="btn" id="captureBtn">
+            <span>📸</span>
+            Capture
+          </button>
+          <button class="btn btn-secondary" id="closeCameraBtn">
+            <span>✖️</span>
+            Cancel
+          </button>
+        </div>
+      </div>
+
+      <input type="file" id="fileInput" accept="image/*" style="display:none;">
+
+      <div id="ocrSection" style="display:none; margin-top:24px;">
+        <div id="ocrSpinner" class="lds-ring" style="display:none;"><div></div><div></div><div></div><div></div></div>
+        <div id="ocrProgress" style="font-weight:600; color:var(--primary); margin-bottom:16px;"></div>
+        <canvas id="imgCanvas" style="display:none;"></canvas>
+        <div id="ocrResults"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>💾</span>
+          Saved IMEI Records
+        </div>
+      </div>
+
+      <input type="text" id="searchInput" placeholder="🔍 Search by IMEI, Model, Buyer or Seller..." class="input">
+      
+      <select id="sortSelect" class="select">
+        <option value="newest">📅 Newest First</option>
+        <option value="oldest">📅 Oldest First</option>
+      </select>
+
+      <div class="table-container">
+        <table class="dashboard-table">
+          <thead>
+            <tr>
+              <th>IMEI1</th>
+              <th>Model</th>
+              <th>Buyer</th>
+              <th>Seller</th>
+              <th>Source</th>
+              <th>Date & Time</th>
+              <th>Image</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="dashboardBody"></tbody>
+        </table>
+      </div>
+      <div id="pagination"></div>
+    </div>
+  </div>
+
+  <!-- Manual Entry Modal -->
+  <div id="manualModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeManualModal">&times;</span>
+      <h3>✍️ Manual IMEI Entry</h3>
+      <form id="manualForm">
+        <label for="manualIMEIInput">IMEI1 (15 digits) *</label>
+        <input type="text" id="manualIMEIInput" class="input" placeholder="123456789012345" maxlength="15" required>
+        
+        <label for="manualModelInput">Phone Model *</label>
+        <input type="text" id="manualModelInput" class="input" placeholder="e.g., iPhone 14 Pro, Samsung S23" required>
+        
+        <label for="manualBuyerInput">Buyer Name *</label>
+        <input type="text" id="manualBuyerInput" class="input" placeholder="Enter buyer name" required>
+        
+        <label for="manualSellerInput">Seller Name *</label>
+        <input type="text" id="manualSellerInput" class="input" placeholder="Enter seller name" required>
+        
+        <button type="submit" class="btn btn-success" style="width:100%; margin-top:16px;">
+          <span>💾</span>
+          Save IMEI
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Buyer/Seller/Model Details Modal -->
+  <div id="buyerSellerModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeBuyerSellerModal">&times;</span>
+      <h3>📝 Enter Details</h3>
+      <div class="info" id="detectedIMEI"></div>
+      <form id="buyerSellerForm">
+        <label for="modelInput">Phone Model *</label>
+        <input type="text" id="modelInput" class="input" placeholder="e.g., iPhone 14 Pro, Samsung S23" required>
+        
+        <label for="buyerInput">Buyer Name *</label>
+        <input type="text" id="buyerInput" class="input" placeholder="Enter buyer name" required>
+        
+        <label for="sellerInput">Seller Name *</label>
+        <input type="text" id="sellerInput" class="input" placeholder="Enter seller name" required>
+        
+        <button type="submit" class="btn btn-success" style="width:100%; margin-top:16px;">
+          <span>💾</span>
+          Save with Details
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
+  <script async src="https://docs.opencv.org/4.x/opencv.js" onload="onOpenCvReady()"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-database-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBrRJ92BBSBcFV7OYevuhWCho1erZFRh00",
+      authDomain: "imei-id.firebaseapp.com",
+      databaseURL: "https://imei-id-default-rtdb.firebaseio.com",
+      projectId: "imei-id",
+      storageBucket: "imei-id.firebasestorage.app",
+      messagingSenderId: "219784298923",
+      appId: "1:219784298923:web:b541963ba95fd12262d2ee",
+      measurementId: "G-3CE6NB7B4K"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let stream = null, currentImageData = null, currentSource = '', ocrCandidates = [], ocrConfidence = 0, cvReady = false;
+    let imeiData = [];
+    let pendingIMEI = null;
+    let barcodeScanning = false;
+
+    function showToast(msg, type = 'info') {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.style.background = type === 'error' ? 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' : 
+                               (type === 'success' ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : 
+                               'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)');
+      toast.style.display = 'block';
+      setTimeout(() => toast.style.display = 'none', 3000);
+    }
+
+    function onOpenCvReady() {
+      cvReady = true;
+      console.log("OpenCV.js ready");
+    }
+
+    /* ==================== BARCODE SCANNER (FIXED) ==================== */
+    document.getElementById('barcodeScanBtn').onclick = () => {
+      // Stop any existing camera/scanner
+      if (stream) {
+        stream.getTracks().forEach(t => t.stop());
+        stream = null;
+      }
+      try { 
+        if (window.Quagga) Quagga.stop(); 
+      } catch (e) {}
+
+      document.getElementById('barcodeScannerSection').style.display = '';
+      document.getElementById('cameraSection').style.display = 'none';
+      document.getElementById('ocrSection').style.display = 'none';
+      currentSource = 'barcode';
+      
+      if (window.Quagga) {
+        startBarcodeScanner();
+      } else {
+        showToast('Barcode library not loaded. Try upload/manual.', 'error');
+        document.getElementById('barcodeScannerSection').style.display = 'none';
+      }
+    };
+
+    function startBarcodeScanner() {
+      barcodeScanning = true;
+      document.getElementById('barcodeStatus').textContent = '🔍 Initializing scanner...';
+      document.getElementById('barcodeStatus').className = 'barcode-status scanning';
+
+      Quagga.init({
+        inputStream: {
+          name: "Live",
+          type: "LiveStream",
+          target: document.querySelector('#barcodeScanner'),
+          constraints: {
+            width: { min: 640 },
+            height: { min: 480 },
+            facingMode: "environment"
+          }
+        },
+        decoder: {
+          readers: [
+            "code_128_reader",
+            "ean_reader",
+            "ean_8_reader",
+            "code_39_reader",
+            "code_39_vin_reader",
+            "codabar_reader",
+            "upc_reader",
+            "upc_e_reader",
+            "i2of5_reader"
+          ],
+          debug: false
+        },
+        locate: true
+      }, function(err) {
+        if (err) {
+          console.error('Quagga init error:', err);
+          showToast('Barcode scanner failed: ' + err.message + '. Use HTTPS, grant camera permission, and ensure no other app uses camera.', 'error');
+          try { Quagga.stop(); } catch (e) {}
+          document.getElementById('barcodeScannerSection').style.display = 'none';
+          barcodeScanning = false;
+          return;
+        }
+        console.log('Quagga initialized successfully');
+        document.getElementById('barcodeStatus').textContent = '🔍 Scanning for barcode...';
+        Quagga.start();
+      });
+
+      let detectionCount = {};
+      let detectionThreshold = 3;
+
+      Quagga.onDetected(function(result) {
+        if (!barcodeScanning) return;
+
+        let code = result.codeResult.code;
+        
+        if (!detectionCount[code]) {
+          detectionCount[code] = 1;
+        } else {
+          detectionCount[code]++;
+        }
+
+        document.getElementById('barcodeStatus').textContent = `✓ Detected: ${code} (${detectionCount[code]}/${detectionThreshold})`;
+        document.getElementById('barcodeStatus').className = 'barcode-status detected';
+
+        if (detectionCount[code] >= detectionThreshold) {
+          barcodeScanning = false;
+          Quagga.stop();
+          
+          let digits = code.replace(/\D/g, '');
+          if (digits.length >= 15) {
+            pendingIMEI = digits.substring(0, 15);
+            document.getElementById('barcodeScannerSection').style.display = 'none';
+            
+            showToast('✓ Barcode detected!', 'success');
+            
+            document.getElementById('detectedIMEI').innerHTML = `<span>📊</span> <strong>Barcode IMEI:</strong> <code style="background:#fff;padding:4px 12px;border-radius:6px;font-size:1.1rem;">${pendingIMEI}</code>`;
+            document.getElementById('modelInput').value = '';
+            document.getElementById('buyerInput').value = '';
+            document.getElementById('sellerInput').value = '';
+            document.getElementById('buyerSellerModal').style.display = 'block';
+          } else {
+            showToast('Invalid barcode format. Use manual entry.', 'error');
+            document.getElementById('barcodeScannerSection').style.display = 'none';
+          }
+        }
+      });
+    }
+
+    document.getElementById('closeBarcodeBtn').onclick = () => {
+      barcodeScanning = false;
+      try { Quagga.stop(); } catch (e) {}
+      document.getElementById('barcodeScannerSection').style.display = 'none';
+    };
+
+    /* ==================== CAMERA (OCR) - FIXED ==================== */
+    document.getElementById('scanBtn').onclick = async () => {
+      // Stop any existing scanner
+      try { 
+        if (window.Quagga && barcodeScanning) { 
+          Quagga.stop(); 
+          barcodeScanning = false;
+        }
+      } catch (e) {}
+      
+      document.getElementById('barcodeScannerSection').style.display = 'none';
+
+      try {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          throw new Error("Camera API not available");
+        }
+        
+        stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { 
+            facingMode: "environment",
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          } 
+        });
+        
+        document.getElementById('cameraPreview').srcObject = stream;
+        document.getElementById('cameraSection').style.display = '';
+        document.getElementById('ocrSection').style.display = 'none';
+        currentSource = 'camera';
+        
+      } catch (e) {
+        console.error('Camera error:', e);
+        showToast(
+          'Camera access denied or unavailable. Please:\n' +
+          '1. Use HTTPS (not HTTP)\n' +
+          '2. Grant camera permission in browser settings\n' +
+          '3. Close other apps using camera\n' +
+          '4. Try Upload or Manual entry instead',
+          'error'
+        );
+        document.getElementById('cameraSection').style.display = 'none';
+      }
+    };
+
+    document.getElementById('closeCameraBtn').onclick = () => {
+      if (stream) {
+        stream.getTracks().forEach(t => t.stop());
+        stream = null;
+      }
+      document.getElementById('cameraSection').style.display = 'none';
+    };
+
+    document.getElementById('captureBtn').onclick = () => {
+      const video = document.getElementById('cameraPreview');
+      const canvas = document.getElementById('imgCanvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.style.display = '';
+      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+      currentImageData = canvas.toDataURL('image/jpeg');
+      if (stream) {
+        stream.getTracks().forEach(t => t.stop());
+        stream = null;
+      }
+      document.getElementById('cameraSection').style.display = 'none';
+      startOCRProcess(currentImageData);
+    };
+
+    /* Upload */
+    document.getElementById('uploadBtn').onclick = () => {
+      document.getElementById('fileInput').value = '';
+      document.getElementById('fileInput').click();
+    };
+
+    document.getElementById('fileInput').onchange = e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      currentSource = 'upload';
+      const reader = new FileReader();
+      reader.onload = evt => {
+        currentImageData = evt.target.result;
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.getElementById('imgCanvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          canvas.style.display = '';
+          canvas.getContext('2d').drawImage(img, 0, 0);
+          startOCRProcess(currentImageData);
+        };
+        img.src = currentImageData;
+      };
+      reader.readAsDataURL(file);
+    };
+
+    /* Manual Entry */
+    document.getElementById('manualBtn').onclick = () => {
+      document.getElementById('manualModal').style.display = 'block';
+      document.getElementById('manualIMEIInput').value = '';
+      document.getElementById('manualModelInput').value = '';
+      document.getElementById('manualBuyerInput').value = '';
+      document.getElementById('manualSellerInput').value = '';
+    };
+
+    document.getElementById('closeManualModal').onclick = () => {
+      document.getElementById('manualModal').style.display = 'none';
+    };
+
+    document.getElementById('closeBuyerSellerModal').onclick = () => {
+      document.getElementById('buyerSellerModal').style.display = 'none';
+      pendingIMEI = null;
+    };
+
+    window.onclick = e => {
+      if (e.target == document.getElementById('manualModal')) {
+        document.getElementById('manualModal').style.display = 'none';
+      }
+      if (e.target == document.getElementById('buyerSellerModal')) {
+        document.getElementById('buyerSellerModal').style.display = 'none';
+        pendingIMEI = null;
+      }
+    };
+
+    document.getElementById('manualForm').onsubmit = async e => {
+      e.preventDefault();
+      const imei = document.getElementById('manualIMEIInput').value.trim().replace(/\D/g, '');
+      const model = document.getElementById('manualModelInput').value.trim();
+      const buyer = document.getElementById('manualBuyerInput').value.trim();
+      const seller = document.getElementById('manualSellerInput').value.trim();
+      
+      if (!/^\d{15}$/.test(imei)) {
+        showToast('IMEI must be 15 digits', 'error');
+        return;
+      }
+      if (!model || !buyer || !seller) {
+        showToast('Model, Buyer and Seller required', 'error');
+        return;
+      }
+
+      currentSource = 'manual';
+      currentImageData = null;
+      document.getElementById('manualModal').style.display = 'none';
+      await saveIMEI(imei, model, buyer, seller);
+    };
+
+    document.getElementById('buyerSellerForm').onsubmit = async e => {
+      e.preventDefault();
+      const model = document.getElementById('modelInput').value.trim();
+      const buyer = document.getElementById('buyerInput').value.trim();
+      const seller = document.getElementById('sellerInput').value.trim();
+
+      if (!model || !buyer || !seller) {
+        showToast('Model, Buyer and Seller required', 'error');
+        return;
+      }
+      if (!pendingIMEI) {
+        showToast('No IMEI to save', 'error');
+        return;
+      }
+
+      document.getElementById('buyerSellerModal').style.display = 'none';
+      await saveIMEI(pendingIMEI, model, buyer, seller);
+      pendingIMEI = null;
+    };
+
+    /* OpenCV Preprocessing */
+    function preprocessImageWithOpenCV(imgElement) {
+      if (!cvReady) return imgElement.src;
+      try {
+        let src = cv.imread(imgElement);
+        let dst = new cv.Mat();
+        cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
+        cv.GaussianBlur(dst, dst, new cv.Size(3, 3), 0);
+        cv.adaptiveThreshold(dst, dst, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2);
+        let M = cv.Mat.ones(2, 2, cv.CV_8U);
+        cv.morphologyEx(dst, dst, cv.MORPH_OPEN, M);
+        
+        let maxDim = 1024;
+        if (dst.cols > maxDim || dst.rows > maxDim) {
+          let scale = maxDim / Math.max(dst.cols, dst.rows);
+          let dsize = new cv.Size(Math.round(dst.cols * scale), Math.round(dst.rows * scale));
+          let resized = new cv.Mat();
+          cv.resize(dst, resized, dsize, 0, 0, cv.INTER_AREA);
+          dst.delete();
+          dst = resized;
+        }
+        
+        cv.cvtColor(dst, dst, cv.COLOR_GRAY2RGBA);
+        const canvas = document.createElement('canvas');
+        cv.imshow(canvas, dst);
+        src.delete();
+        dst.delete();
+        M.delete();
+        return canvas.toDataURL('image/png');
+      } catch (err) {
+        console.error('OpenCV error:', err);
+        return imgElement.src;
+      }
+    }
+
+    /* OCR */
+    async function startOCRProcess(imgDataUrl) {
+      document.getElementById('ocrSection').style.display = '';
+      document.getElementById('ocrSpinner').style.display = 'inline-block';
+      document.getElementById('ocrProgress').textContent = 'Loading OCR...';
+
+      const img = new Image();
+      img.onload = async () => {
+        const processedDataUrl = preprocessImageWithOpenCV(img);
+        document.getElementById('ocrProgress').textContent = 'Scanning...';
+
+        const result = await Tesseract.recognize(processedDataUrl, 'eng', {
+          logger: m => {
+            if (m.status === 'recognizing text') {
+              document.getElementById('ocrProgress').textContent = `Scanning... ${Math.round(m.progress * 100)}%`;
+            }
+          }
+        });
+
+        document.getElementById('ocrSpinner').style.display = 'none';
+        document.getElementById('ocrProgress').textContent = '';
+        ocrConfidence = Math.round(result.data.confidence || 0);
+        ocrCandidates = extractIMEICandidates(result.data.text);
+
+        if (!ocrCandidates.length) {
+          document.getElementById('ocrResults').innerHTML = '<div class="error">❌ No IMEI found. Try barcode or manual.</div>';
+          return;
+        }
+
+        document.getElementById('ocrResults').innerHTML = `
+          <div class="info">
+            <span>🎯</span>
+            <div>
+              <strong>OCR Confidence: ${ocrConfidence}%</strong><br>
+              <span>Detected: <code style="background:#fff;padding:4px 8px;border-radius:6px;">${ocrCandidates.join(', ')}</code></span>
+            </div>
+          </div>
+        `;
+
+        currentImageData = processedDataUrl;
+        pendingIMEI = ocrCandidates[0];
+        document.getElementById('detectedIMEI').innerHTML = `<span>📱</span> <strong>IMEI:</strong> <code style="background:#fff;padding:4px 12px;border-radius:6px;font-size:1.1rem;">${pendingIMEI}</code>`;
+        document.getElementById('modelInput').value = '';
+        document.getElementById('buyerInput').value = '';
+        document.getElementById('sellerInput').value = '';
+        document.getElementById('buyerSellerModal').style.display = 'block';
+      };
+      img.src = imgDataUrl;
+    }
+
+    function extractIMEICandidates(text) {
+      const candidates = [];
+      const labelRegex = /(?:IMEI[\s-:]?\s*1|IMEI1|IMEI[\s-:]?)([\s:\-]*)([0-9]{14,16})/gi;
+      const fallbackRegex = /\b([0-9]{15})\b/g;
+      let foundLabel = false, m;
+
+      while (m = labelRegex.exec(text)) {
+        let imei = m[2].trim();
+        if (imei.length === 14) imei += '0';
+        else if (imei.length === 16) imei = imei.slice(0, 15);
+        if (imei.length === 15) {
+          candidates.push(imei);
+          foundLabel = true;
+        }
+      }
+      
+      if (!foundLabel) {
+        let fallbackSet = new Set();
+        while (m = fallbackRegex.exec(text)) {
+          fallbackSet.add(m[1]);
+        }
+        candidates.push(...fallbackSet);
+      }
+      
+      return Array.from(new Set(candidates));
+    }
+
+    /* Save to Firebase */
+    async function saveIMEI(imei1, model, buyer, seller) {
+      if (!imei1 || imei1.length !== 15 || !/^\d{15}$/.test(imei1)) {
+        showToast('Invalid IMEI', 'error');
+        return;
+      }
+      if (!model || !buyer || !seller) {
+        showToast('Model, Buyer/Seller required', 'error');
+        return;
+      }
+
+      try {
+        let isDuplicate = false;
+        try {
+          const snap = await db.ref('imeis').orderByChild('imei1').equalTo(imei1).once('value');
+          if (snap.exists()) isDuplicate = true;
+        } catch {
+          const allSnap = await db.ref('imeis').once('value');
+          allSnap.forEach(child => {
+            if (child.val().imei1 === imei1) isDuplicate = true;
+          });
+        }
+
+        if (isDuplicate) {
+          const proceed = confirm(`⚠️ IMEI ${imei1} exists. Save anyway?`);
+          if (!proceed) return;
+        }
+
+        await db.ref('imeis').push({
+          imei1,
+          model,
+          buyer,
+          seller,
+          source: currentSource,
+          timestamp: new Date().toISOString(),
+          imagePreviewURL: currentImageData || null
+        });
+
+        showToast('✅ Saved successfully!', 'success');
+        document.getElementById('ocrSection').style.display = 'none';
+        document.getElementById('imgCanvas').style.display = 'none';
+        await loadDashboard();
+      } catch (err) {
+        showToast('❌ Save failed', 'error');
+        console.error(err);
+      }
+    }
+
+    /* Dashboard */
+    async function loadDashboard() {
+      try {
+        const snap = await db.ref('imeis').once('value');
+        imeiData = [];
+        snap.forEach(child => {
+          let v = child.val();
+          v._id = child.key;
+          imeiData.push(v);
+        });
+        cacheIMEIs();
+        renderDashboard();
+      } catch (err) {
+        showToast('Load error', 'error');
+        console.error(err);
+      }
+    }
+
+    function cacheIMEIs() {
+      try {
+        localStorage.setItem('imeiCache', JSON.stringify(imeiData.slice(0, 50)));
+      } catch (e) { }
+    }
+
+    function renderDashboard(page = 1) {
+      let rows = '';
+      let data = imeiData.slice();
+
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      if (q) {
+        data = data.filter(d => 
+          (d.imei1 && d.imei1.includes(q)) || 
+          (d.model && d.model.toLowerCase().includes(q)) ||
+          (d.buyer && d.buyer.toLowerCase().includes(q)) ||
+          (d.seller && d.seller.toLowerCase().includes(q))
+        );
+      }
+
+      const sort = document.getElementById('sortSelect').value;
+      data = sort === 'oldest' 
+        ? data.sort((a, b) => (a.timestamp || '').localeCompare(b.timestamp || ''))
+        : data.sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''));
+
+      const itemsPerPage = 10;
+      const total = data.length;
+      const pages = Math.ceil(total / itemsPerPage);
+      const paged = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+
+      paged.forEach(d => {
+        const dateTime = d.timestamp ? d.timestamp.split('T') : ['N/A', ''];
+        const imgThumb = d.imagePreviewURL 
+          ? `<img src="${d.imagePreviewURL}" class="thumbnail" alt="IMEI">` 
+          : '➖';
+        
+        const sourceIcon = d.source === 'barcode' ? '📊' : (d.source === 'camera' ? '📷' : (d.source === 'upload' ? '📁' : '✍️'));
+        
+        rows += `<tr>
+          <td><code>${d.imei1 || 'N/A'}</code></td>
+          <td><strong>${d.model || 'N/A'}</strong></td>
+          <td>${d.buyer || 'N/A'}</td>
+          <td>${d.seller || 'N/A'}</td>
+          <td><span style="background:#f1f5f9;padding:4px 10px;border-radius:6px;font-size:0.8rem;font-weight:600;">${sourceIcon} ${d.source || 'N/A'}</span></td>
+          <td>${dateTime[0]}<br><small style="color:#64748b;">${dateTime[1] ? dateTime[1].slice(0, 8) : ''}</small></td>
+          <td>${imgThumb}</td>
+          <td>
+            <button class="action-btn" title="View" onclick='viewImage("${d.imagePreviewURL || ''}")'>🖼️</button>
+            <button class="action-btn" title="Delete" onclick='deleteIMEI("${d._id}")'>🗑️</button>
+          </td>
+        </tr>`;
+      });
+
+      document.getElementById('dashboardBody').innerHTML = rows || '<tr><td colspan="8" style="text-align:center;padding:40px;color:#64748b;">No records found</td></tr>';
+
+      let pagn = '';
+      for (let i = 1; i <= pages; i++) {
+        pagn += `<button onclick="renderDashboard(${i})" style="background:${i === page ? 'var(--primary)' : 'white'};color:${i === page ? 'white' : 'var(--dark)'};border-color:${i === page ? 'var(--primary)' : 'var(--gray-light)'};">${i}</button>`;
+      }
+      document.getElementById('pagination').innerHTML = pagn;
+    }
+
+    document.getElementById('searchInput').oninput = () => renderDashboard();
+    document.getElementById('sortSelect').onchange = () => renderDashboard();
+
+    function viewImage(url) {
+      if (!url) {
+        showToast('No image', 'error');
+        return;
+      }
+      const win = window.open();
+      win.document.write(`<img src="${url}" style="width:100%;">`);
+    }
+
+    async function deleteIMEI(id) {
+      if (!confirm("🗑️ Delete permanently?")) return;
+      try {
+        await db.ref('imeis/' + id).remove();
+        showToast('✅ Deleted', 'success');
+        await loadDashboard();
+      } catch (err) {
+        showToast('❌ Delete failed', 'error');
+      }
+    }
+
+    document.getElementById('exportBtn').onclick = () => {
+      if (!imeiData.length) {
+        showToast('No data to export', 'error');
+        return;
+      }
+      const lines = [["IMEI1", "Model", "Buyer", "Seller", "Source", "Timestamp"]];
+      imeiData.forEach(d => lines.push([d.imei1 || '', d.model || '', d.buyer || '', d.seller || '', d.source || '', d.timestamp || '']));
+      const csv = lines.map(row => row.map(val => `"${String(val).replace(/"/g, '""')}"`).join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'imeis_export.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('📥 Exported!', 'success');
+    };
+
+    window.addEventListener('load', async () => {
+      await loadDashboard();
+      if (!imeiData.length) {
+        const cache = localStorage.getItem('imeiCache');
+        if (cache) {
+          try {
+            imeiData = JSON.parse(cache);
+            renderDashboard();
+          } catch (e) { }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
