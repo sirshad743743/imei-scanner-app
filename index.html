@@ -1,9 +1,20 @@
+<!--
+================================================================================
+IMEI SCANNER PRO - ULTIMATE EDITION
+Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
+================================================================================
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Mohsin IMEI Scanner Pro</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.8" />
+  
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1928101226550197"
+     crossorigin="anonymous"></script>
+	 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -182,12 +193,12 @@
       border-radius: var(--border-radius);
       overflow: hidden;
       display: none;
-      min-height: 400px;
     }
 
     #scannerVideo {
       width: 100%;
-      height: 100%;
+      height: auto;
+      max-height: 500px;
       object-fit: cover;
       display: block;
     }
@@ -205,18 +216,18 @@
 
     .scanner-target {
       width: 85%;
-      height: 150px; /* Taller for shipping labels */
+      height: 120px;
       border: 2px solid rgba(255, 255, 255, 0.5);
       border-radius: 12px;
       position: relative;
-      box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.6); /* Dim outside area */
+      box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.5); /* Dim outside area */
     }
 
     .scanner-target::after {
       content: '';
       position: absolute;
       top: -2px; left: -2px; right: -2px; bottom: -2px;
-      border: 3px solid var(--success);
+      border: 2px solid var(--success);
       border-radius: 12px;
       clip-path: polygon(0 30px, 0 0, 30px 0, 100% 0, 100% 30px, 100% 100%, calc(100% - 30px) 100%, 0 100%);
       animation: pulseBorder 2s infinite;
@@ -224,7 +235,7 @@
 
     .scanner-line {
       position: absolute;
-      top: 50%; left: 5%; right: 5%;
+      top: 50%; left: 10%; right: 10%;
       height: 2px;
       background: var(--danger);
       box-shadow: 0 0 4px var(--danger);
@@ -232,9 +243,9 @@
     }
 
     @keyframes scanMove {
-      0% { transform: translateY(-60px); opacity: 0; }
+      0% { transform: translateY(-50px); opacity: 0; }
       50% { opacity: 1; }
-      100% { transform: translateY(60px); opacity: 0; }
+      100% { transform: translateY(50px); opacity: 0; }
     }
 
     @keyframes pulseBorder {
@@ -258,7 +269,7 @@
     }
 
     .control-pill {
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(10px);
       padding: 8px 16px;
       border-radius: 20px;
@@ -268,6 +279,24 @@
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+
+    /* Range Slider for Zoom */
+    input[type=range] {
+      -webkit-appearance: none;
+      background: transparent;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 16px; width: 16px;
+      border-radius: 50%;
+      background: white;
+      margin-top: -6px;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%; height: 4px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 2px;
     }
 
     .input, .select {
@@ -401,10 +430,9 @@
     }
 
     .thumbnail:hover {
-      transform: scale(2.5);
+      transform: scale(1.5);
       box-shadow: 0 8px 20px rgba(0,0,0,0.2);
       z-index: 100;
-      border: 2px solid white;
     }
 
     .action-btn {
@@ -589,7 +617,7 @@
       .dashboard-table { font-size: 0.8rem; }
       .dashboard-table th, .dashboard-table td { padding: 10px 8px; }
       .modal-content { padding: 24px; margin: 10% auto; width: 95%; }
-      .scanner-target { height: 120px; }
+      .scanner-target { height: 100px; }
     }
   </style>
 </head>
@@ -599,7 +627,7 @@
   <div class="container">
     <div class="header">
       <h1>📱 Mohsin IMEI Scanner Pro</h1>
-      <p>Ultimate Edition: ZXing Barcode & Enhanced OCR Engine</p>
+      <p>Advanced IMEI Management System</p>
     </div>
 
     <div class="card">
@@ -613,7 +641,7 @@
       <div class="btn-group">
         <button class="btn btn-warning" id="barcodeModeBtn">
           <span>📊</span>
-          Barcode/QR Mode
+          Barcode Mode
         </button>
         <button class="btn" id="ocrModeBtn">
           <span>📷</span>
@@ -633,9 +661,9 @@
         </button>
       </div>
 
+      <!-- Unified Scanner View -->
       <div id="scannerContainer">
-        <video id="scannerVideo" autoplay playsinline muted></video>
-        
+        <video id="scannerVideo" autoplay playsinline></video>
         <div class="scanner-overlay">
           <div class="scanner-target">
             <div class="scanner-line"></div>
@@ -646,12 +674,12 @@
         </div>
         
         <div class="controls-overlay">
-          <div class="control-pill" id="cameraSelectContainer" style="display:none;">
-            <select id="sourceSelect" style="background:transparent; border:none; color:white; font-weight:bold; outline:none;"></select>
+          <div class="control-pill" id="zoomControl" style="display:none;">
+            <span>🔍 Zoom:</span>
+            <input type="range" id="zoomSlider" min="1" max="5" step="0.1" value="1" style="width:100px;">
           </div>
-
           <button class="btn btn-success" id="captureBtn" style="display:none; padding: 8px 20px; font-size: 0.9rem;">
-            📸 Capture for OCR
+            📸 Capture & Scan
           </button>
           <button class="btn btn-secondary" id="stopScannerBtn" style="padding: 8px 20px; font-size: 0.9rem;">
             ❌ Stop
@@ -659,9 +687,11 @@
         </div>
       </div>
       
+      <!-- Hidden elements for processing -->
       <canvas id="scanCanvas" style="display:none;"></canvas>
       <input type="file" id="fileInput" accept="image/*" style="display:none;">
 
+      <!-- Results Section -->
       <div id="processingSection" style="display:none; margin-top:24px;">
         <div id="ocrSpinner" class="lds-ring"><div></div><div></div><div></div><div></div></div>
         <div id="ocrProgress" style="font-weight:600; color:var(--primary); margin-bottom:16px;">Processing...</div>
@@ -708,6 +738,7 @@
     </div>
   </div>
 
+  <!-- Manual Entry Modal -->
   <div id="manualModal" class="modal">
     <div class="modal-content">
       <span class="close-modal" id="closeManualModal">&times;</span>
@@ -757,6 +788,7 @@
     </div>
   </div>
 
+  <!-- Post-Scan Detail Modal -->
   <div id="scanResultModal" class="modal">
     <div class="modal-content">
       <span class="close-modal" id="closeScanResultModal">&times;</span>
@@ -812,7 +844,8 @@
     </div>
   </div>
 
-  <script type="text/javascript" src="https://unpkg.com/@zxing/library@latest"></script>
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
   <script async src="https://docs.opencv.org/4.x/opencv.js" onload="onOpenCvReady()"></script>
   <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-database-compat.js"></script>
@@ -834,18 +867,18 @@
     const db = firebase.database();
 
     /* ================= STATE ================= */
-    let codeReader = null; // ZXing Reader
+    let currentStream = null;
     let cvReady = false;
     let activeMode = null; // 'barcode' | 'ocr'
     let currentImageData = null;
+    let track = null; // Video track for zoom
     let imeiData = [];
-    let selectedDeviceId = null;
 
     /* ================= HELPERS ================= */
     function showToast(msg, type = 'info') {
       const toast = document.getElementById('toast');
       toast.textContent = msg;
-      toast.className = 'toast'; 
+      toast.className = 'toast'; // reset class
       toast.style.background = type === 'error' ? 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' : 
                                (type === 'success' ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : 
                                'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)');
@@ -855,142 +888,137 @@
 
     function onOpenCvReady() {
       cvReady = true;
-      console.log("OpenCV loaded successfully");
-    }
-
-    /**
-     * Luhn Algorithm - The Professional Check
-     * Validates if a 15 digit number is a mathematically valid IMEI
-     */
-    function luhnCheck(imei) {
-      if (/[^0-9]/.test(imei) || imei.length !== 15) return false;
-      let sum = 0;
-      for (let i = 0; i < 15; i++) {
-        let digit = parseInt(imei.charAt(i));
-        // Double every second digit from the right (which is even indices 0-based from left... wait)
-        // Standard luhn: double every second digit from right.
-        // For 15 digits, we double indices: 1, 3, 5, 7, 9, 11, 13 (0-based)
-        if (i % 2 !== 0) {
-          digit *= 2;
-          if (digit > 9) digit -= 9;
-        }
-        sum += digit;
-      }
-      return (sum % 10 === 0);
+      console.log("OpenCV loaded");
     }
 
     /* ================= CAMERA & SCANNER LOGIC ================= */
-    
-    // Initialize ZXing Code Reader
-    codeReader = new ZXing.BrowserMultiFormatReader();
-
     async function startCamera(mode) {
-      stopScanner(); // Reset any existing stream
+      stopScanner(); // Stop existing
       activeMode = mode;
       
       const container = document.getElementById('scannerContainer');
-      const status = document.getElementById('scannerStatus');
-      const captureBtn = document.getElementById('captureBtn');
       const video = document.getElementById('scannerVideo');
+      const status = document.getElementById('scannerStatus');
+      const zoomControl = document.getElementById('zoomControl');
+      const captureBtn = document.getElementById('captureBtn');
 
       container.style.display = 'block';
       document.getElementById('processingSection').style.display = 'none';
 
       try {
-        if (mode === 'barcode') {
-            status.textContent = "Scanning... (Supports Barcode & DataMatrix)";
-            captureBtn.style.display = 'none';
-            
-            // Start ZXing
-            const videoInputDevices = await codeReader.listVideoInputDevices();
-            
-            // Choose back camera preferentially
-            const selectedDeviceId = videoInputDevices.find(device => device.label.toLowerCase().includes('back'))?.deviceId || videoInputDevices[0].deviceId;
+        const constraints = {
+          video: {
+            facingMode: 'environment',
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
+            focusMode: 'continuous'
+          }
+        };
 
-            codeReader.decodeFromVideoDevice(selectedDeviceId, 'scannerVideo', (result, err) => {
-                if (result) {
-                    const text = result.getText();
-                    const clean = text.replace(/[^0-9]/g, '');
-                    // Check if it looks like an IMEI (15 digits)
-                    if (clean.length === 15 && luhnCheck(clean)) {
-                        console.log("Valid IMEI Found via Barcode:", clean);
-                        codeReader.reset();
-                        handleScanSuccess({ imei1: clean });
-                    } else if (clean.length > 15) {
-                        // Sometimes codes contain more data, try to extract
-                         const match = clean.match(/\d{15}/);
-                         if(match && luhnCheck(match[0])) {
-                            codeReader.reset();
-                            handleScanSuccess({ imei1: match[0] });
-                         }
-                    }
-                }
-            });
-
-        } else if (mode === 'ocr') {
-          status.textContent = "Align text in box & Click Capture";
-          captureBtn.style.display = 'block';
-          
-          // Use standard getUserMedia for OCR video feed (higher resolution for capture)
-          const constraints = {
-            video: {
-              facingMode: { ideal: "environment" },
-              width: { ideal: 3840 }, // Try 4k
-              height: { ideal: 2160 }
-            }
+        currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = currentStream;
+        
+        // Setup Zoom
+        track = currentStream.getVideoTracks()[0];
+        const caps = track.getCapabilities();
+        if (caps.zoom) {
+          zoomControl.style.display = 'flex';
+          const slider = document.getElementById('zoomSlider');
+          slider.min = caps.zoom.min;
+          slider.max = caps.zoom.max;
+          slider.step = caps.zoom.step;
+          slider.value = caps.zoom.min;
+          slider.oninput = () => {
+            track.applyConstraints({ advanced: [{ zoom: slider.value }] });
           };
-          
-          navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-            video.srcObject = stream;
-            window.localStream = stream; // Keep reference to stop later
-          }).catch(err => {
-              showToast("Camera Error: " + err, "error");
-          });
+        } else {
+          zoomControl.style.display = 'none';
+        }
+
+        if (mode === 'barcode') {
+          status.textContent = "Scanning for Barcode...";
+          captureBtn.style.display = 'none';
+          initQuagga(); // Start Quagga on top of this stream
+        } else if (mode === 'ocr') {
+          status.textContent = "Align text in box & Capture";
+          captureBtn.style.display = 'block';
+          // OCR doesn't auto-scan video frames to save battery/perf, we capture
         }
 
       } catch (err) {
         console.error(err);
-        showToast("Scanner initialization failed: " + err.message, 'error');
+        showToast("Camera error: " + err.message, 'error');
         container.style.display = 'none';
       }
     }
 
     function stopScanner() {
-        // Stop ZXing
-        if (codeReader) codeReader.reset();
-        
-        // Stop generic stream if OCR mode
-        const video = document.getElementById('scannerVideo');
-        if (video.srcObject) {
-            video.srcObject.getTracks().forEach(track => track.stop());
-            video.srcObject = null;
-        }
-        if (window.localStream) {
-            window.localStream.getTracks().forEach(track => track.stop());
-            window.localStream = null;
-        }
-
-        document.getElementById('scannerContainer').style.display = 'none';
-        activeMode = null;
+      if (currentStream) {
+        currentStream.getTracks().forEach(t => t.stop());
+        currentStream = null;
+      }
+      try { Quagga.stop(); } catch(e){}
+      document.getElementById('scannerContainer').style.display = 'none';
+      activeMode = null;
     }
 
     document.getElementById('stopScannerBtn').onclick = stopScanner;
+
     document.getElementById('barcodeModeBtn').onclick = () => startCamera('barcode');
     document.getElementById('ocrModeBtn').onclick = () => startCamera('ocr');
 
+    /* ================= QUAGGA BARCODE ENGINE ================= */
+    function initQuagga() {
+      Quagga.init({
+        inputStream: {
+          name: "Live",
+          type: "LiveStream",
+          target: document.querySelector('#scannerVideo'),
+          constraints: { width: 1280, height: 720, facingMode: "environment" } // Reuse existing stream implicitly
+        },
+        decoder: {
+          readers: ["code_128_reader", "ean_reader", "code_39_reader", "upc_reader"], // Most common for IMEI
+          multiple: false
+        },
+        locate: true,
+        patchSize: "medium", // Better for dense barcodes
+        halfSample: false // Better resolution
+      }, function(err) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        Quagga.start();
+      });
+
+      let detectCount = 0;
+      let lastCode = '';
+
+      Quagga.onDetected(function(result) {
+        const code = result.codeResult.code;
+        // Basic filter for IMEI length (15 digits)
+        const digits = code.replace(/\D/g, '');
+        
+        if (digits.length >= 14 && digits.length <= 16) {
+           if (code === lastCode) detectCount++;
+           else { detectCount = 1; lastCode = code; }
+
+           if (detectCount > 2) { // 3 consec detections
+             Quagga.stop();
+             handleScanSuccess({ imei1: digits.substring(0, 15) });
+           }
+        }
+      });
+    }
+
     /* ================= OCR ENGINE (CAPTURE & UPLOAD) ================= */
-    
     document.getElementById('captureBtn').onclick = () => {
       const video = document.getElementById('scannerVideo');
       const canvas = document.getElementById('scanCanvas');
-      
-      // Capture high res frame
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(video, 0, 0);
-      
-      const imgData = canvas.toDataURL('image/jpeg', 1.0);
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      const imgData = canvas.toDataURL('image/jpeg', 0.9);
       stopScanner();
       processImageForOCR(imgData);
     };
@@ -1011,29 +1039,23 @@
       
       const img = new Image();
       img.onload = async () => {
-        // 1. Preprocess with OpenCV (Enhanced)
+        // 1. Preprocess with OpenCV
         const processedBase64 = enhanceImage(img, displayCanvas);
         currentImageData = processedBase64;
         
         // 2. Run Tesseract
-        document.getElementById('ocrProgress').textContent = "Analyzing Text with Neural Net...";
-        
-        // Configure Tesseract to look for numbers mainly
+        document.getElementById('ocrProgress').textContent = "Analyzing Text...";
         const worker = await Tesseract.createWorker('eng');
-        await worker.setParameters({
-          tessedit_char_whitelist: '0123456789IMEISN:/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', // Restrict chars
-        });
-
         const ret = await worker.recognize(processedBase64);
         await worker.terminate();
 
-        // 3. Smart Parse & Validate
+        // 3. Smart Parse
         const result = smartParseIMEI(ret.data.text);
         
         if (result.imei1) {
           handleScanSuccess(result);
         } else {
-          showToast('❌ No valid IMEI found. Try cleaning lens or better light.', 'error');
+          showToast('❌ No valid IMEI found. Try again.', 'error');
           document.getElementById('processingSection').style.display = 'none';
         }
       };
@@ -1042,6 +1064,7 @@
 
     function enhanceImage(imgElement, outputCanvas) {
       if (!cvReady) {
+        // Fallback: Just draw to canvas
         outputCanvas.width = imgElement.width;
         outputCanvas.height = imgElement.height;
         outputCanvas.getContext('2d').drawImage(imgElement, 0, 0);
@@ -1055,11 +1078,13 @@
         // Convert to grayscale
         cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
         
-        // Increase contrast logic (simple histogram equalization often too harsh, let's use threshold)
-        // Adaptive Thresholding: Block size 15, Constant 5 works well for labels
-        cv.adaptiveThreshold(dst, dst, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 15, 5);
+        // Gaussian Blur to reduce noise
+        cv.GaussianBlur(dst, dst, new cv.Size(3, 3), 0);
         
-        // Resize for display if huge
+        // Adaptive Thresholding (good for text on variable backgrounds)
+        cv.adaptiveThreshold(dst, dst, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2);
+        
+        // Resize if too huge (speeds up OCR)
         if (dst.cols > 1500) {
            let scale = 1500 / dst.cols;
            let dsize = new cv.Size(Math.round(dst.cols * scale), Math.round(dst.rows * scale));
@@ -1068,6 +1093,7 @@
 
         cv.imshow(outputCanvas, dst);
         const dataUrl = outputCanvas.toDataURL();
+        
         src.delete(); dst.delete();
         return dataUrl;
       } catch (e) {
@@ -1076,51 +1102,30 @@
       }
     }
 
-    /* ================= INTELLIGENT PARSING & REPAIR ================= */
-    
-    // Fixes common OCR letter-to-number swaps
-    function repairTypo(str) {
-      return str.toUpperCase()
-        .replace(/O/g, '0')
-        .replace(/D/g, '0')
-        .replace(/I/g, '1')
-        .replace(/L/g, '1')
-        .replace(/Z/g, '2')
-        .replace(/S/g, '5')
-        .replace(/B/g, '8')
-        .replace(/G/g, '6');
-    }
-
+    /* ================= INTELLIGENT PARSING LOGIC ================= */
     function smartParseIMEI(text) {
       console.log("Raw OCR Text:", text);
-      
       const lines = text.split(/\r?\n/);
       const candidates = [];
       let imei1 = null;
       let imei2 = null;
 
+      // Regular expressions for 15-digit numbers
+      const strictIMEI = /[0-9]{15}/g;
+
+      // Strategy 1: Line-by-line Context Analysis
       lines.forEach((line, index) => {
-        // 1. Clean the line of noise but keep spaces
-        let cleanLine = line.replace(/[^a-zA-Z0-9\s:]/g, ''); 
+        const cleanLine = line.toUpperCase().replace(/[^A-Z0-9]/g, ''); // Remove symbols
+        const matches = line.match(strictIMEI);
         
-        // 2. Repair typos (Letters to Numbers)
-        let repairedLine = repairTypo(cleanLine);
+        if (matches) {
+          matches.forEach(num => {
+            // Check context in the original line
+            const isIMEI2Label = line.toUpperCase().includes("IMEI2") || line.toUpperCase().includes("SIM2") || line.toUpperCase().includes("SECOND");
+            const isIMEI1Label = line.toUpperCase().includes("IMEI1") || line.toUpperCase().includes("SIM1") || line.toUpperCase().includes("FIRST") || line.toUpperCase().includes("IMEI:");
 
-        // 3. Regex to find sequences of 15 digits (allowing for spaces e.g. 35 4444 55)
-        // This looks for digit groups that sum up to 15 length
-        const digitSequences = repairedLine.match(/\d[\d\s]*\d/g);
-
-        if (digitSequences) {
-            digitSequences.forEach(seq => {
-                const pureNum = seq.replace(/\s/g, '');
-                if (pureNum.length === 15) {
-                    if (luhnCheck(pureNum)) {
-                         const isIMEI2Label = line.toUpperCase().includes("IMEI2") || line.toUpperCase().includes("SIM2");
-                         const isIMEI1Label = line.toUpperCase().includes("IMEI1") || line.toUpperCase().includes("SIM1") || line.toUpperCase().includes("IMEI:");
-                         candidates.push({ num: pureNum, isIMEI2Label, isIMEI1Label });
-                    }
-                }
-            });
+            candidates.push({ num, isIMEI2Label, isIMEI1Label, index });
+          });
         }
       });
 
@@ -1130,18 +1135,23 @@
       if (uniqueCandidates.length === 0) return {};
 
       // Logic Decision Tree
+      
+      // 1. Look for explicit labels
       const explicitIMEI1 = uniqueCandidates.find(c => c.isIMEI1Label);
       const explicitIMEI2 = uniqueCandidates.find(c => c.isIMEI2Label);
 
       if (explicitIMEI1) imei1 = explicitIMEI1.num;
       if (explicitIMEI2) imei2 = explicitIMEI2.num;
 
-      // Fill gaps
+      // 2. If no explicit labels, use positional logic (First found is usually IMEI1)
       if (!imei1 && uniqueCandidates.length > 0) {
+        // Exclude the one already assigned to imei2 (if any)
         const remaining = uniqueCandidates.filter(c => c.num !== imei2);
         if (remaining.length > 0) imei1 = remaining[0].num;
       }
+
       if (!imei2 && uniqueCandidates.length > 1) {
+         // If we found multiple but no label, usually the second one in the list is IMEI2
          const remaining = uniqueCandidates.filter(c => c.num !== imei1);
          if (remaining.length > 0) imei2 = remaining[0].num;
       }
@@ -1157,23 +1167,31 @@
       document.getElementById('scanIMEI1').value = data.imei1 || '';
       document.getElementById('scanIMEI2').value = data.imei2 || '';
       
+      // Clear others
+      document.getElementById('scanModel').value = '';
+      document.getElementById('scanBuyer').value = '';
+      document.getElementById('scanBuyerID').value = '';
+      document.getElementById('scanSeller').value = '';
+      document.getElementById('scanSellerID').value = '';
+
       // Feedback Text
       const feedback = document.getElementById('scanFeedback');
       if (data.imei1 && data.imei2) {
-        feedback.innerHTML = `✅ <strong>Verified!</strong> Found Dual Valid IMEIs.<br><small>${data.imei1} / ${data.imei2}</small>`;
+        feedback.innerHTML = `✅ <strong>Success!</strong> Found Dual IMEIs.<br><small>${data.imei1} / ${data.imei2}</small>`;
       } else {
-        feedback.innerHTML = `✅ <strong>Verified!</strong> Found Valid IMEI.<br><small>${data.imei1}</small>`;
+        feedback.innerHTML = `✅ <strong>Success!</strong> Found IMEI.<br><small>${data.imei1}</small>`;
       }
 
       modal.style.display = 'block';
     }
 
-    /* ================= MANUAL & FORM HANDLING (Unchanged Logic) ================= */
+    /* ================= MANUAL & FORM HANDLING ================= */
     document.getElementById('manualBtn').onclick = () => {
       document.getElementById('manualModal').style.display = 'block';
       document.getElementById('manualForm').reset();
     };
 
+    // Close Modals
     document.querySelectorAll('.close-modal').forEach(btn => {
       btn.onclick = () => {
         document.getElementById('manualModal').style.display = 'none';
@@ -1181,12 +1199,16 @@
       };
     });
 
+    // Save Data - Manual
     document.getElementById('manualForm').onsubmit = (e) => handleFormSubmit(e, 'manual');
-    document.getElementById('scanResultForm').onsubmit = (e) => handleFormSubmit(e, activeMode === 'barcode' ? 'barcode' : (activeMode === 'ocr' ? 'ocr_camera' : 'upload'));
+    
+    // Save Data - Scanned
+    document.getElementById('scanResultForm').onsubmit = (e) => handleFormSubmit(e, activeMode === 'barcode' ? 'barcode' : (activeMode === 'ocr' ? 'camera' : 'upload'));
 
     async function handleFormSubmit(e, source) {
       e.preventDefault();
       
+      // Determine which form was submitted
       const isManual = source === 'manual';
       const prefix = isManual ? 'manual' : 'scan';
 
@@ -1201,11 +1223,6 @@
       if (!imei1 || imei1.length !== 15) {
         showToast('IMEI1 must be 15 digits', 'error');
         return;
-      }
-
-      // Final Check
-      if (!luhnCheck(imei1) && !isManual) { // Allow manual override, but warn on scan
-         if(!confirm("The scanned IMEI does not pass the checksum validation. Save anyway?")) return;
       }
       
       const record = {
@@ -1244,6 +1261,7 @@
       let rows = '';
       let data = imeiData.slice();
 
+      // Search & Sort logic (Same as before)
       const q = document.getElementById('searchInput').value.trim().toLowerCase();
       if (q) {
         data = data.filter(d => 
@@ -1253,6 +1271,7 @@
         );
       }
       
+      // Sort logic
       const sort = document.getElementById('sortSelect').value;
       data.sort((a,b) => sort === 'oldest' ? a.timestamp.localeCompare(b.timestamp) : b.timestamp.localeCompare(a.timestamp));
 
@@ -1282,6 +1301,7 @@
       });
       document.getElementById('dashboardBody').innerHTML = rows || '<tr><td colspan="11" style="text-align:center;padding:20px;">No records</td></tr>';
       
+      // Pagination buttons
       let pagn = '';
       for(let i=1; i<=pages; i++) {
         pagn += `<button onclick="renderDashboard(${i})" style="opacity:${i===page?1:0.6}">${i}</button>`;
@@ -1304,6 +1324,7 @@
     document.getElementById('searchInput').oninput = () => renderDashboard();
     document.getElementById('sortSelect').onchange = () => renderDashboard();
     document.getElementById('exportBtn').onclick = () => {
+      // Export logic
        const lines = [["IMEI1", "IMEI2", "Model", "Buyer", "BuyerID", "Seller", "SellerID", "Source", "Date"]];
        imeiData.forEach(d => lines.push([
          `"${d.imei1}"`, `"${d.imei2||''}"`, `"${d.model}"`, 
