@@ -1,7 +1,7 @@
 <!--
 ================================================================================
-IMEI SCANNER PRO - ULTIMATE EDITION
-Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
+IMEI SCANNER PRO - ULTIMATE EDITION (UPGRADED)
+Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing, CRUD (Edit/Delete)
 ================================================================================
 -->
 
@@ -10,17 +10,12 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
 <head>
   <meta charset="UTF-8" />
   <title>Mohsin IMEI Scanner Pro</title>
-  <meta name="viewport" content="width=device-width, initial-scale=0.8" />
-  
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1928101226550197"
-     crossorigin="anonymous"></script>
-	 
-	 
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+     
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
+   
   <style>
     :root {
       --primary: #6366f1;
@@ -43,7 +38,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
+     
     html, body {
       min-height: 100vh;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -429,6 +424,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       transition: transform 0.3s ease;
+      cursor: pointer;
     }
 
     .thumbnail:hover {
@@ -437,18 +433,33 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
       z-index: 100;
     }
 
+    .action-group {
+      display: flex;
+      gap: 8px;
+    }
+
     .action-btn {
-      background: none;
-      border: none;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 1.3rem;
-      transition: transform 0.2s ease;
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
       padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
     }
 
     .action-btn:hover {
-      transform: scale(1.2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
+
+    .btn-edit:hover { background: #eff6ff; border-color: var(--primary); color: var(--primary); }
+    .btn-delete:hover { background: #fef2f2; border-color: var(--danger); color: var(--danger); }
 
     #pagination {
       display: flex;
@@ -553,6 +564,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
       font-size: 0.95rem;
       font-weight: 600;
       display: none;
+      text-align: center;
       animation: slideUpToast 0.4s ease;
     }
 
@@ -625,24 +637,12 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
 </head>
 <body>
   <div class="toast" id="toast"></div>
-  
+   
   <div class="container">
     <div class="header">
       <h1>📱 Mohsin IMEI Scanner Pro</h1>
       <p>Advanced IMEI Management System</p>
     </div>
-	<!-- Ad1 -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-1928101226550197"
-     data-ad-slot="8860363760"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-	
-
     <div class="card">
       <div class="card-header">
         <div class="card-title">
@@ -685,7 +685,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
             Ready to scan...
           </div>
         </div>
-        
+         
         <div class="controls-overlay">
           <div class="control-pill" id="zoomControl" style="display:none;">
             <span>🔍 Zoom:</span>
@@ -699,7 +699,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
           </button>
         </div>
       </div>
-      
+       
       <!-- Hidden elements for processing -->
       <canvas id="scanCanvas" style="display:none;"></canvas>
       <input type="file" id="fileInput" accept="image/*" style="display:none;">
@@ -721,7 +721,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
       </div>
 
       <input type="text" id="searchInput" placeholder="🔍 Search by IMEI, Model, Buyer or Seller..." class="input">
-      
+       
       <select id="sortSelect" class="select">
         <option value="newest">📅 Newest First</option>
         <option value="oldest">📅 Oldest First</option>
@@ -751,11 +751,11 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
     </div>
   </div>
 
-  <!-- Manual Entry Modal -->
+  <!-- Manual/Edit Entry Modal -->
   <div id="manualModal" class="modal">
     <div class="modal-content">
       <span class="close-modal" id="closeManualModal">&times;</span>
-      <h3>✍️ Manual IMEI Entry</h3>
+      <h3 id="manualModalTitle">✍️ Manual IMEI Entry</h3>
       <form id="manualForm">
         <div class="form-grid">
           <div>
@@ -767,10 +767,10 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
             <input type="text" id="manualIMEI2Input" class="input" placeholder="Secondary IMEI" maxlength="15">
           </div>
         </div>
-        
+         
         <label for="manualModelInput">Phone Model *</label>
         <input type="text" id="manualModelInput" class="input" placeholder="e.g., iPhone 14 Pro, Samsung S23" required>
-        
+         
         <div class="form-grid">
           <div>
             <label for="manualBuyerInput">Buyer Name *</label>
@@ -792,8 +792,8 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
             <input type="text" id="manualSellerIDInput" class="input" placeholder="Seller ID Number" required>
           </div>
         </div>
-        
-        <button type="submit" class="btn btn-success" style="width:100%; margin-top:16px;">
+         
+        <button type="submit" id="manualSubmitBtn" class="btn btn-success" style="width:100%; margin-top:16px;">
           <span>💾</span>
           Save IMEI
         </button>
@@ -806,7 +806,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
     <div class="modal-content">
       <span class="close-modal" id="closeScanResultModal">&times;</span>
       <h3>📝 Verify & Save Details</h3>
-      
+       
       <div class="info">
         <span>🎯</span>
         <div id="scanFeedback"></div>
@@ -826,7 +826,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
 
         <label for="scanModel">Phone Model *</label>
         <input type="text" id="scanModel" class="input" placeholder="e.g., iPhone 14 Pro, Samsung S23" required>
-        
+         
         <div class="form-grid">
           <div>
             <label for="scanBuyer">Buyer Name *</label>
@@ -848,7 +848,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
             <input type="text" id="scanSellerID" class="input" placeholder="Seller ID Number" required>
           </div>
         </div>
-        
+         
         <button type="submit" class="btn btn-success" style="width:100%; margin-top:16px;">
           <span>💾</span>
           Save Record
@@ -886,6 +886,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
     let currentImageData = null;
     let track = null; // Video track for zoom
     let imeiData = [];
+    let editingId = null; // ID of record being edited
 
     /* ================= HELPERS ================= */
     function showToast(msg, type = 'info') {
@@ -908,7 +909,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
     async function startCamera(mode) {
       stopScanner(); // Stop existing
       activeMode = mode;
-      
+       
       const container = document.getElementById('scannerContainer');
       const video = document.getElementById('scannerVideo');
       const status = document.getElementById('scannerStatus');
@@ -930,7 +931,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
 
         currentStream = await navigator.mediaDevices.getUserMedia(constraints);
         video.srcObject = currentStream;
-        
+         
         // Setup Zoom
         track = currentStream.getVideoTracks()[0];
         const caps = track.getCapabilities();
@@ -1011,7 +1012,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
         const code = result.codeResult.code;
         // Basic filter for IMEI length (15 digits)
         const digits = code.replace(/\D/g, '');
-        
+         
         if (digits.length >= 14 && digits.length <= 16) {
            if (code === lastCode) detectCount++;
            else { detectCount = 1; lastCode = code; }
@@ -1049,13 +1050,13 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
       document.getElementById('processingSection').style.display = 'block';
       const displayCanvas = document.getElementById('imgCanvas');
       displayCanvas.style.display = 'block';
-      
+       
       const img = new Image();
       img.onload = async () => {
         // 1. Preprocess with OpenCV
         const processedBase64 = enhanceImage(img, displayCanvas);
         currentImageData = processedBase64;
-        
+         
         // 2. Run Tesseract
         document.getElementById('ocrProgress').textContent = "Analyzing Text...";
         const worker = await Tesseract.createWorker('eng');
@@ -1064,7 +1065,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
 
         // 3. Smart Parse
         const result = smartParseIMEI(ret.data.text);
-        
+         
         if (result.imei1) {
           handleScanSuccess(result);
         } else {
@@ -1087,16 +1088,16 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
       try {
         let src = cv.imread(imgElement);
         let dst = new cv.Mat();
-        
+         
         // Convert to grayscale
         cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
-        
+         
         // Gaussian Blur to reduce noise
         cv.GaussianBlur(dst, dst, new cv.Size(3, 3), 0);
-        
+         
         // Adaptive Thresholding (good for text on variable backgrounds)
         cv.adaptiveThreshold(dst, dst, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2);
-        
+         
         // Resize if too huge (speeds up OCR)
         if (dst.cols > 1500) {
            let scale = 1500 / dst.cols;
@@ -1106,7 +1107,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
 
         cv.imshow(outputCanvas, dst);
         const dataUrl = outputCanvas.toDataURL();
-        
+         
         src.delete(); dst.delete();
         return dataUrl;
       } catch (e) {
@@ -1130,7 +1131,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
       lines.forEach((line, index) => {
         const cleanLine = line.toUpperCase().replace(/[^A-Z0-9]/g, ''); // Remove symbols
         const matches = line.match(strictIMEI);
-        
+         
         if (matches) {
           matches.forEach(num => {
             // Check context in the original line
@@ -1148,7 +1149,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
       if (uniqueCandidates.length === 0) return {};
 
       // Logic Decision Tree
-      
+       
       // 1. Look for explicit labels
       const explicitIMEI1 = uniqueCandidates.find(c => c.isIMEI1Label);
       const explicitIMEI2 = uniqueCandidates.find(c => c.isIMEI2Label);
@@ -1175,11 +1176,11 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
     function handleScanSuccess(data) {
       document.getElementById('processingSection').style.display = 'none';
       const modal = document.getElementById('scanResultModal');
-      
+       
       // Auto-fill form
       document.getElementById('scanIMEI1').value = data.imei1 || '';
       document.getElementById('scanIMEI2').value = data.imei2 || '';
-      
+       
       // Clear others
       document.getElementById('scanModel').value = '';
       document.getElementById('scanBuyer').value = '';
@@ -1199,9 +1200,18 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
     }
 
     /* ================= MANUAL & FORM HANDLING ================= */
-    document.getElementById('manualBtn').onclick = () => {
-      document.getElementById('manualModal').style.display = 'block';
+    
+    // Reset Manual Form State
+    function resetManualForm() {
       document.getElementById('manualForm').reset();
+      editingId = null;
+      document.getElementById('manualModalTitle').innerHTML = '✍️ Manual IMEI Entry';
+      document.getElementById('manualSubmitBtn').innerHTML = '<span>💾</span> Save IMEI';
+    }
+
+    document.getElementById('manualBtn').onclick = () => {
+      resetManualForm();
+      document.getElementById('manualModal').style.display = 'block';
     };
 
     // Close Modals
@@ -1209,18 +1219,19 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
       btn.onclick = () => {
         document.getElementById('manualModal').style.display = 'none';
         document.getElementById('scanResultModal').style.display = 'none';
+        resetManualForm();
       };
     });
 
     // Save Data - Manual
     document.getElementById('manualForm').onsubmit = (e) => handleFormSubmit(e, 'manual');
-    
+     
     // Save Data - Scanned
     document.getElementById('scanResultForm').onsubmit = (e) => handleFormSubmit(e, activeMode === 'barcode' ? 'barcode' : (activeMode === 'ocr' ? 'camera' : 'upload'));
 
     async function handleFormSubmit(e, source) {
       e.preventDefault();
-      
+       
       // Determine which form was submitted
       const isManual = source === 'manual';
       const prefix = isManual ? 'manual' : 'scan';
@@ -1238,18 +1249,38 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
         return;
       }
       
+      // Handle Image: If manual, use existing if editing, else null. If scan, use current capture.
+      let imgUrl = isManual ? null : currentImageData;
+      
+      if (editingId && isManual) {
+        // Find original record to preserve image if we are editing manually
+        const existing = imeiData.find(r => r._id === editingId);
+        if (existing) {
+          imgUrl = existing.imagePreviewURL || null;
+        }
+      }
+
       const record = {
         imei1, imei2, model, buyer, buyerId, seller, sellerId,
         source: source,
         timestamp: new Date().toISOString(),
-        imagePreviewURL: isManual ? null : currentImageData
+        imagePreviewURL: imgUrl
       };
 
       try {
-        await db.ref('imeis').push(record);
-        showToast('✅ Saved Successfully', 'success');
+        if (editingId) {
+          // Update Existing
+          await db.ref('imeis/' + editingId).update(record);
+          showToast('✅ Record Updated', 'success');
+        } else {
+          // Create New
+          await db.ref('imeis').push(record);
+          showToast('✅ Saved Successfully', 'success');
+        }
+
         document.getElementById('manualModal').style.display = 'none';
         document.getElementById('scanResultModal').style.display = 'none';
+        resetManualForm();
         loadDashboard();
       } catch (err) {
         showToast('Save Failed: ' + err.message, 'error');
@@ -1274,7 +1305,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
       let rows = '';
       let data = imeiData.slice();
 
-      // Search & Sort logic (Same as before)
+      // Search & Sort logic
       const q = document.getElementById('searchInput').value.trim().toLowerCase();
       if (q) {
         data = data.filter(d => 
@@ -1283,7 +1314,7 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
           (d.buyer && d.buyer.toLowerCase().includes(q))
         );
       }
-      
+       
       // Sort logic
       const sort = document.getElementById('sortSelect').value;
       data.sort((a,b) => sort === 'oldest' ? a.timestamp.localeCompare(b.timestamp) : b.timestamp.localeCompare(a.timestamp));
@@ -1296,31 +1327,65 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
         const time = d.timestamp.split('T')[0];
         const img = d.imagePreviewURL ? `<img src="${d.imagePreviewURL}" class="thumbnail" onclick="viewImage('${d.imagePreviewURL}')">` : '—';
         
-        rows += `<tr>
-          <td><code>${d.imei1}</code></td>
-          <td><code>${d.imei2 || '-'}</code></td>
-          <td>${d.model}</td>
-          <td>${d.buyer}</td>
-          <td><small>${d.buyerId}</small></td>
-          <td>${d.seller}</td>
-          <td><small>${d.sellerId}</small></td>
-          <td>${d.source}</td>
-          <td>${time}</td>
-          <td>${img}</td>
-          <td>
-            <button class="action-btn" onclick="deleteRecord('${d._id}')">🗑️</button>
-          </td>
-        </tr>`;
+        // Properly escaped and formatted HTML for the row
+        rows += `
+          <tr>
+            <td><code>${d.imei1}</code></td>
+            <td><code>${d.imei2 || '-'}</code></td>
+            <td>${d.model}</td>
+            <td>${d.buyer}</td>
+            <td><small>${d.buyerId}</small></td>
+            <td>${d.seller}</td>
+            <td><small>${d.sellerId}</small></td>
+            <td>${d.source}</td>
+            <td>${time}</td>
+            <td>${img}</td>
+            <td>
+              <div class="action-group">
+                <button class="action-btn btn-edit" onclick="editRecord('${d._id}')" title="Edit Record">
+                  ✏️
+                </button>
+                <button class="action-btn btn-delete" onclick="deleteRecord('${d._id}')" title="Delete Record">
+                  🗑️
+                </button>
+              </div>
+            </td>
+          </tr>`;
       });
-      document.getElementById('dashboardBody').innerHTML = rows || '<tr><td colspan="11" style="text-align:center;padding:20px;">No records</td></tr>';
       
+      document.getElementById('dashboardBody').innerHTML = rows || '<tr><td colspan="11" style="text-align:center;padding:20px;">No records found</td></tr>';
+       
       // Pagination buttons
       let pagn = '';
       for(let i=1; i<=pages; i++) {
-        pagn += `<button onclick="renderDashboard(${i})" style="opacity:${i===page?1:0.6}">${i}</button>`;
+        pagn += `<button onclick="renderDashboard(${i})" style="opacity:${i===page?1:0.6}; border-color:${i===page?'var(--primary)':'var(--gray-light)'}; background:${i===page?'var(--primary)':'white'}; color:${i===page?'white':'var(--dark)'}">${i}</button>`;
       }
       document.getElementById('pagination').innerHTML = pagn;
     }
+
+    // New Edit Function
+    window.editRecord = (id) => {
+      const record = imeiData.find(r => r._id === id);
+      if(!record) return;
+
+      editingId = id;
+
+      // Populate Manual Form
+      document.getElementById('manualIMEIInput').value = record.imei1;
+      document.getElementById('manualIMEI2Input').value = record.imei2 || '';
+      document.getElementById('manualModelInput').value = record.model;
+      document.getElementById('manualBuyerInput').value = record.buyer;
+      document.getElementById('manualBuyerIDInput').value = record.buyerId;
+      document.getElementById('manualSellerInput').value = record.seller;
+      document.getElementById('manualSellerIDInput').value = record.sellerId;
+
+      // Change UI to indicate Edit Mode
+      document.getElementById('manualModalTitle').innerHTML = '✏️ Edit IMEI Record';
+      document.getElementById('manualSubmitBtn').innerHTML = '<span>💾</span> Update Record';
+
+      // Open Modal
+      document.getElementById('manualModal').style.display = 'block';
+    };
 
     window.viewImage = (url) => {
       const win = window.open("");
@@ -1328,9 +1393,14 @@ Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing
     };
 
     window.deleteRecord = async (id) => {
-      if(confirm('Delete this record?')) {
-        await db.ref('imeis/'+id).remove();
-        loadDashboard();
+      if(confirm('Are you sure you want to delete this record?')) {
+        try {
+          await db.ref('imeis/'+id).remove();
+          showToast('Deleted successfully', 'success');
+          loadDashboard();
+        } catch(e) {
+          showToast('Delete failed', 'error');
+        }
       }
     };
 
