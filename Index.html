@@ -1,0 +1,2383 @@
+<!--
+================================================================================
+IMEI SCANNER PRO - ULTIMATE EDITION (UPGRADED WITH SALES DASHBOARD)
+Features: Dual IMEI Logic, Camera Zoom, Enhanced OCR, Smart Parsing, CRUD,
+Purchase/Selling Amounts, Animated Profit/Loss Dashboard
+================================================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mohsin IMEI Scanner Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #5b6cff;
+      --primary-dark: #4255f4;
+      --primary-light: #8da2ff;
+      --success: #10b981;
+      --success-dark: #059669;
+      --danger: #ef4444;
+      --danger-dark: #dc2626;
+      --warning: #f59e0b;
+      --dark: #0f172a;
+      --dark-soft: #172033;
+      --dark-light: #1e293b;
+      --gray: #64748b;
+      --gray-light: #cbd5e1;
+      --gray-soft: #e2e8f0;
+      --gray-faint: #f1f5f9;
+      --bg: #f5f7ff;
+      --card-bg: rgba(255,255,255,0.82);
+      --card-solid: #ffffff;
+      --panel-bg: rgba(248,250,255,0.78);
+      --border: rgba(148, 163, 184, 0.2);
+      --shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 24px 80px rgba(15, 23, 42, 0.16);
+      --shadow-soft: 0 10px 30px rgba(91, 108, 255, 0.12);
+      --border-radius: 18px;
+      --border-radius-lg: 28px;
+      --motion: 320ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      min-height: 100%;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, rgba(91,108,255,0.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(16,185,129,0.12), transparent 22%),
+        linear-gradient(180deg, #eef2ff 0%, #f8fafc 46%, #eef4ff 100%);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--dark);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      inset: auto;
+      width: 34vw;
+      height: 34vw;
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(40px);
+      opacity: 0.36;
+    }
+
+    body::before {
+      top: -10vw;
+      right: -8vw;
+      background: radial-gradient(circle, rgba(91, 108, 255, 0.28), transparent 65%);
+      animation: floatAmbient 14s ease-in-out infinite;
+    }
+
+    body::after {
+      bottom: -12vw;
+      left: -10vw;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.18), transparent 68%);
+      animation: floatAmbient 18s ease-in-out infinite reverse;
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 28px 22px 52px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      position: relative;
+      text-align: center;
+      margin-bottom: 26px;
+      padding: 22px 18px 10px;
+      animation: fadeInDown 0.7s var(--motion);
+    }
+
+    .header h1 {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      font-size: clamp(2rem, 3vw, 3.25rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--dark);
+      margin-bottom: 10px;
+      text-shadow: 0 14px 32px rgba(91,108,255,0.08);
+    }
+
+    .header p {
+      font-size: clamp(0.95rem, 1.2vw, 1.08rem);
+      color: #475569;
+      font-weight: 600;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.76) 100%);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 26px;
+      margin-bottom: 22px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.75);
+      transition: transform var(--motion), box-shadow var(--motion), border-color var(--motion);
+      animation: fadeInUp 0.65s var(--motion);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.42), transparent 30%, transparent 70%, rgba(91,108,255,0.04));
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 28px 80px rgba(15,23,42,0.14);
+      border-color: rgba(91,108,255,0.18);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+      gap: 14px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-title {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      font-size: clamp(1.15rem, 1.4vw, 1.45rem);
+      font-weight: 800;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      font-weight: 700;
+      padding: 14px 22px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.16);
+      cursor: pointer;
+      transition: transform var(--motion), box-shadow var(--motion), filter var(--motion), background var(--motion);
+      font-size: 0.95rem;
+      box-shadow: 0 10px 24px rgba(91, 108, 255, 0.28);
+      position: relative;
+      overflow: hidden;
+      min-height: 48px;
+      isolation: isolate;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 10%, rgba(255,255,255,0.3) 45%, transparent 80%);
+      transform: translateX(-120%);
+      transition: transform 700ms ease;
+      z-index: -1;
+    }
+
+    .btn:hover::before { transform: translateX(120%); }
+
+    .btn:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 16px 34px rgba(91,108,255,0.32);
+      filter: saturate(1.08);
+    }
+
+    .btn:active {
+      transform: translateY(0) scale(0.99);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+      box-shadow: 0 10px 24px rgba(100, 116, 139, 0.22);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--success) 0%, var(--success-dark) 100%);
+      box-shadow: 0 10px 24px rgba(16, 185, 129, 0.24);
+    }
+
+    .btn-warning {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      box-shadow: 0 10px 24px rgba(245, 158, 11, 0.24);
+    }
+
+    #scannerContainer {
+      position: relative;
+      animation: fadeIn 0.45s ease;
+      margin-top: 16px;
+      background: #07101f;
+      border-radius: 22px;
+      overflow: hidden;
+      display: none;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), 0 14px 50px rgba(2,8,23,0.28);
+      z-index: 1;
+    }
+
+    #scannerVideo {
+      width: 100%;
+      height: auto;
+      max-height: 560px;
+      object-fit: cover;
+      display: block;
+      transform: scale(1.01);
+    }
+
+    .scanner-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .scanner-target {
+      width: min(88%, 920px);
+      height: 126px;
+      border: 1.5px solid rgba(255, 255, 255, 0.34);
+      border-radius: 16px;
+      position: relative;
+      box-shadow: 0 0 0 4000px rgba(3, 8, 20, 0.56);
+      backdrop-filter: blur(2px);
+    }
+
+    .scanner-target::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border: 2px solid rgba(16, 185, 129, 0.95);
+      border-radius: 16px;
+      clip-path: polygon(0 30px, 0 0, 30px 0, 100% 0, 100% 30px, 100% 100%, calc(100% - 30px) 100%, 0 100%);
+      animation: pulseBorder 2.3s infinite;
+      box-shadow: 0 0 20px rgba(16,185,129,0.16);
+    }
+
+    .scanner-line {
+      position: absolute;
+      top: 50%; left: 8%; right: 8%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, rgba(239,68,68,0.85) 15%, rgba(255,255,255,0.92) 50%, rgba(239,68,68,0.85) 85%, transparent 100%);
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+      animation: scanMove 2.2s infinite linear;
+    }
+
+    .controls-overlay {
+      position: absolute;
+      bottom: 16px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      pointer-events: auto;
+      z-index: 20;
+      padding: 0 18px;
+      flex-wrap: wrap;
+    }
+
+    .control-pill {
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      padding: 10px 16px;
+      border-radius: 999px;
+      color: white;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.16);
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      background: transparent;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 16px; width: 16px;
+      border-radius: 50%;
+      background: white;
+      margin-top: -6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%; height: 4px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 999px;
+    }
+
+    .input, .select {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(148, 163, 184, 0.28);
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border-color var(--motion), box-shadow var(--motion), transform var(--motion), background var(--motion);
+      background: rgba(255,255,255,0.92);
+      color: var(--dark);
+      margin-bottom: 16px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
+    }
+
+    .input::placeholder { color: #94a3b8; }
+
+    .input:hover, .select:hover {
+      border-color: rgba(91, 108, 255, 0.3);
+    }
+
+    .input:focus, .select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(91, 108, 255, 0.12), 0 10px 24px rgba(91,108,255,0.08);
+      transform: translateY(-1px);
+      background: white;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--dark);
+      font-size: 0.9rem;
+    }
+
+    .field-hint {
+      color: var(--gray);
+      font-size: 0.82rem;
+      margin-top: -8px;
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    #imgCanvas {
+      width: 100%;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(15,23,42,0.1);
+      max-height: 260px;
+      margin-top: 16px;
+      background: white;
+    }
+
+    .info, .error, .success {
+      padding: 16px 18px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid transparent;
+    }
+
+    .info {
+      background: linear-gradient(135deg, rgba(219,234,254,0.95) 0%, rgba(191,219,254,0.85) 100%);
+      color: #1e40af;
+      border-color: rgba(59,130,246,0.18);
+    }
+
+    .error {
+      background: linear-gradient(135deg, rgba(254,226,226,0.95) 0%, rgba(254,202,202,0.85) 100%);
+      color: #991b1b;
+      border-color: rgba(239,68,68,0.18);
+    }
+
+    .success {
+      background: linear-gradient(135deg, rgba(209,250,229,0.95) 0%, rgba(167,243,208,0.85) 100%);
+      color: #065f46;
+      border-color: rgba(16,185,129,0.18);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(15,23,42,0.06);
+      background: rgba(255,255,255,0.76);
+      border: 1px solid rgba(255,255,255,0.6);
+      position: relative;
+      z-index: 1;
+    }
+
+    .dashboard-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.9rem;
+      min-width: 1300px;
+    }
+
+    .dashboard-table thead {
+      background: linear-gradient(135deg, #111827 0%, #1e293b 42%, var(--primary-dark) 100%);
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    .dashboard-table th {
+      padding: 16px;
+      text-align: left;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .dashboard-table th:first-child { border-top-left-radius: 18px; }
+    .dashboard-table th:last-child { border-top-right-radius: 18px; }
+
+    .dashboard-table tbody tr {
+      background: rgba(255,255,255,0.92);
+      transition: transform var(--motion), background var(--motion), box-shadow var(--motion);
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .dashboard-table tbody tr:nth-child(even) {
+      background: rgba(248,250,255,0.98);
+    }
+
+    .dashboard-table tbody tr:hover {
+      background: white;
+      transform: translateY(-1px);
+      box-shadow: inset 0 0 0 1px rgba(91,108,255,0.08), 0 10px 18px rgba(15,23,42,0.05);
+    }
+
+    .dashboard-table td {
+      padding: 15px 16px;
+      color: var(--dark);
+      white-space: nowrap;
+      vertical-align: middle;
+      border-bottom: 1px solid rgba(226,232,240,0.8);
+    }
+
+    .dashboard-table code {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      padding: 7px 11px;
+      border-radius: 10px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    .money-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      background: rgba(91,108,255,0.1);
+      color: var(--primary-dark);
+      border: 1px solid rgba(91,108,255,0.08);
+    }
+
+    .net-chip-positive {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--success-dark);
+      border-color: rgba(16,185,129,0.08);
+    }
+
+    .net-chip-negative {
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--danger-dark);
+      border-color: rgba(239,68,68,0.08);
+    }
+
+    .thumbnail {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(15,23,42,0.12);
+      transition: transform var(--motion), box-shadow var(--motion);
+      cursor: pointer;
+      border: 2px solid rgba(255,255,255,0.7);
+    }
+
+    .thumbnail:hover {
+      transform: scale(1.45);
+      box-shadow: 0 18px 30px rgba(15,23,42,0.18);
+      z-index: 100;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(203,213,225,0.92);
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: transform var(--motion), box-shadow var(--motion), background var(--motion), border-color var(--motion);
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      box-shadow: 0 4px 12px rgba(15,23,42,0.04);
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 18px rgba(15,23,42,0.1);
+    }
+
+    .btn-edit:hover { background: #eff6ff; border-color: var(--primary); color: var(--primary); }
+    .btn-delete:hover { background: #fef2f2; border-color: var(--danger); color: var(--danger); }
+
+    #pagination {
+      display: flex;
+      gap: 10px;
+      margin-top: 22px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    #pagination button {
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(203,213,225,0.92);
+      background: rgba(255,255,255,0.9);
+      color: var(--dark);
+      cursor: pointer;
+      transition: transform var(--motion), background var(--motion), border-color var(--motion), color var(--motion), box-shadow var(--motion);
+      font-weight: 700;
+      min-width: 44px;
+      box-shadow: 0 4px 12px rgba(15,23,42,0.04);
+    }
+
+    #pagination button:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(91,108,255,0.24);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.58);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      animation: fadeIn 0.28s ease;
+      overflow-y: auto;
+      padding: 18px 0;
+    }
+
+    .modal-content {
+      background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(248,250,255,0.92) 100%);
+      margin: 2.5% auto;
+      padding: 32px;
+      border-radius: 26px;
+      width: min(92%, 720px);
+      box-shadow: 0 30px 90px rgba(15,23,42,0.2);
+      animation: slideUp 0.38s var(--motion);
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.84);
+    }
+
+    .close-modal {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      color: var(--gray);
+      transition: color var(--motion), transform var(--motion), background var(--motion);
+      line-height: 1;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+    }
+
+    .close-modal:hover {
+      color: var(--danger);
+      transform: rotate(90deg);
+      background: rgba(239,68,68,0.08);
+    }
+
+    .modal h3 {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      font-size: clamp(1.4rem, 2vw, 1.8rem);
+      margin-bottom: 22px;
+      color: var(--dark);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: min(300px, calc(100vw - 32px));
+      max-width: calc(100vw - 32px);
+      padding: 16px 20px;
+      background: var(--dark);
+      color: white;
+      border-radius: 16px;
+      box-shadow: 0 18px 40px rgba(15,23,42,0.3);
+      z-index: 99999;
+      font-size: 0.94rem;
+      font-weight: 700;
+      display: none;
+      text-align: center;
+      animation: slideUpToast 0.35s var(--motion);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .lds-ring {
+      display: inline-block;
+      position: relative;
+      width: 52px;
+      height: 52px;
+    }
+
+    .lds-ring div {
+      box-sizing: border-box;
+      display: block;
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      margin: 4px;
+      border: 4px solid var(--primary);
+      border-radius: 50%;
+      animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      border-color: var(--primary) transparent transparent transparent;
+    }
+
+    .lds-ring div:nth-child(1) { animation-delay: -0.45s; }
+    .lds-ring div:nth-child(2) { animation-delay: -0.3s; }
+    .lds-ring div:nth-child(3) { animation-delay: -0.15s; }
+
+    .analytics-stack {
+      display: grid;
+      gap: 22px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .summary-card, .kpi-card, .chart-panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(247,250,255,0.84) 100%);
+      border-radius: 20px;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--motion), box-shadow var(--motion), border-color var(--motion);
+    }
+
+    .summary-card:hover, .kpi-card:hover, .chart-panel:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(15,23,42,0.08);
+      border-color: rgba(91,108,255,0.16);
+    }
+
+    .summary-card::before,
+    .kpi-card::before,
+    .chart-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      opacity: 0.9;
+    }
+
+    .summary-label,
+    .kpi-label,
+    .chart-title {
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 10px;
+    }
+
+    .summary-main,
+    .kpi-value {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      font-size: clamp(1.35rem, 2vw, 1.76rem);
+      font-weight: 800;
+      color: var(--dark);
+      line-height: 1.08;
+      margin-bottom: 10px;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .summary-meta,
+    .kpi-subtext {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      color: var(--gray);
+      font-size: 0.92rem;
+    }
+
+    .profit-text { color: var(--success-dark); font-weight: 800; }
+    .loss-text { color: var(--danger-dark); font-weight: 800; }
+
+    .analytics-filter {
+      display: grid;
+      grid-template-columns: 220px minmax(180px, 1fr) auto;
+      gap: 14px;
+      align-items: end;
+    }
+
+    .selected-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .selected-caption {
+      color: var(--gray);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card:nth-child(4)::before { background: linear-gradient(90deg, var(--success), #34d399); }
+    .kpi-card:nth-child(5)::before { background: linear-gradient(90deg, var(--danger), #f87171); }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1.4fr;
+      gap: 16px;
+    }
+
+    .split-bars {
+      display: grid;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .split-bar-row {
+      display: grid;
+      grid-template-columns: 92px 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .split-bar-label {
+      font-weight: 800;
+      color: var(--dark);
+      font-size: 0.92rem;
+    }
+
+    .split-bar-track {
+      width: 100%;
+      height: 14px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(226,232,240,0.95), rgba(203,213,225,0.9));
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 2px 8px rgba(15,23,42,0.08);
+    }
+
+    .split-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      transition: width 900ms cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .split-bar-fill::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+      animation: shimmerBar 2.2s linear infinite;
+    }
+
+    .split-bar-fill.profit { background: linear-gradient(90deg, var(--success), #34d399); }
+    .split-bar-fill.loss { background: linear-gradient(90deg, var(--danger), #f87171); }
+
+    .split-bar-value {
+      min-width: 108px;
+      text-align: right;
+      font-weight: 800;
+      color: var(--dark);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .trend-chart-wrap {
+      margin-top: 8px;
+    }
+
+    .trend-chart {
+      height: 280px;
+      display: flex;
+      align-items: end;
+      gap: 10px;
+      padding: 14px 4px 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(91,108,255,0.4) transparent;
+    }
+
+    .trend-chart::-webkit-scrollbar { height: 8px; }
+    .trend-chart::-webkit-scrollbar-thumb {
+      background: rgba(91,108,255,0.35);
+      border-radius: 999px;
+    }
+
+    .trend-bar-group {
+      min-width: 34px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: end;
+      gap: 8px;
+      animation: fadeInUp 0.5s ease;
+    }
+
+    .trend-bars-stack {
+      width: 100%;
+      height: 210px;
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .trend-bar {
+      width: 12px;
+      border-radius: 12px 12px 4px 4px;
+      height: 4px;
+      transition: height 900ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease;
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.12);
+    }
+
+    .trend-bar.profit { background: linear-gradient(180deg, #4ade80 0%, var(--success-dark) 100%); }
+    .trend-bar.loss { background: linear-gradient(180deg, #fca5a5 0%, var(--danger-dark) 100%); }
+
+    .trend-label {
+      font-size: 0.76rem;
+      color: var(--gray);
+      white-space: nowrap;
+      font-weight: 800;
+    }
+
+    .trend-empty {
+      min-height: 228px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray);
+      text-align: center;
+      font-weight: 700;
+      background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+      border-radius: 18px;
+      border: 1px dashed rgba(99, 102, 241, 0.24);
+      padding: 24px;
+    }
+
+    .dashboard-note {
+      margin-top: 10px;
+      color: var(--gray);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .section-pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(91,108,255,0.08);
+      color: var(--primary-dark);
+      font-weight: 800;
+      font-size: 0.85rem;
+      border: 1px solid rgba(91,108,255,0.08);
+      box-shadow: 0 8px 20px rgba(91,108,255,0.08);
+    }
+
+    .fade-slide {
+      animation: fadeInUp 0.45s ease;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .mini-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.88);
+      border: 1px solid rgba(148,163,184,0.16);
+      box-shadow: 0 8px 20px rgba(15,23,42,0.05);
+      color: var(--dark-soft);
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .mini-chip span:last-child {
+      color: var(--gray);
+      font-weight: 700;
+    }
+
+    .mobile-scroll-hint {
+      display: none;
+      margin-top: 12px;
+      color: var(--gray);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    @keyframes scanMove {
+      0% { transform: translateY(-52px); opacity: 0; }
+      20% { opacity: 0.8; }
+      50% { opacity: 1; }
+      100% { transform: translateY(52px); opacity: 0; }
+    }
+
+    @keyframes pulseBorder {
+      0% { border-color: rgba(16,185,129,0.92); box-shadow: 0 0 10px rgba(16,185,129,0.18); }
+      50% { border-color: rgba(91,108,255,0.95); box-shadow: 0 0 22px rgba(91,108,255,0.24); }
+      100% { border-color: rgba(16,185,129,0.92); box-shadow: 0 0 10px rgba(16,185,129,0.18); }
+    }
+
+    @keyframes lds-ring {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(36px) scale(0.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes slideUpToast { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+    @keyframes shimmerBar { 0% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
+    @keyframes floatAmbient {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(18px, 18px, 0); }
+    }
+
+    @media (max-width: 1100px) {
+      .summary-grid,
+      .kpi-grid,
+      .chart-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .kpi-grid .kpi-card:last-child { grid-column: span 2; }
+      .analytics-filter { grid-template-columns: 1fr 1fr auto; }
+    }
+
+    @media (max-width: 820px) {
+      .container { padding: 18px 14px 38px; }
+      .header { margin-bottom: 18px; padding-top: 10px; }
+      .card { padding: 18px; border-radius: 22px; }
+      .btn-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        position: sticky;
+        top: 10px;
+        z-index: 50;
+        padding: 8px;
+        margin-inline: -4px;
+        background: rgba(245,247,255,0.86);
+        backdrop-filter: blur(14px);
+        border-radius: 18px;
+      }
+      .btn { width: 100%; padding: 13px 14px; font-size: 0.9rem; }
+      .dashboard-table { font-size: 0.82rem; min-width: 1180px; }
+      .dashboard-table th, .dashboard-table td { padding: 12px 10px; }
+      .modal-content { padding: 24px 18px; margin: 6% auto 10%; width: 94%; border-radius: 22px; }
+      .scanner-target { height: 104px; width: 90%; }
+      .analytics-filter,
+      .summary-grid,
+      .kpi-grid,
+      .chart-grid {
+        grid-template-columns: 1fr;
+      }
+      .kpi-grid .kpi-card:last-child { grid-column: auto; }
+      .selected-header { align-items: flex-start; }
+      .split-bar-row { grid-template-columns: 72px 1fr auto; }
+      .controls-overlay { bottom: 12px; }
+      .mobile-scroll-hint { display: block; }
+    }
+
+    @media (max-width: 600px) {
+      .header h1 { font-size: 1.78rem; }
+      .header p { font-size: 0.92rem; }
+      .form-grid { grid-template-columns: 1fr; gap: 0; }
+      .summary-main, .kpi-value { font-size: 1.34rem; }
+      .trend-chart { gap: 8px; height: 250px; }
+      .trend-bar-group { min-width: 28px; }
+      .trend-bar { width: 10px; }
+      .btn-group { grid-template-columns: 1fr; }
+      .split-bar-value { min-width: 88px; font-size: 0.86rem; }
+      .control-pill { width: 100%; justify-content: center; }
+      .controls-overlay .btn { width: calc(50% - 6px); }
+      .toast { bottom: 16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="toast" id="toast"></div>
+
+  <div class="container">
+    <div class="header">
+      <h1>📱 Mohsin IMEI Scanner Pro</h1>
+      <p>Advanced IMEI Management System</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>🔍</span>
+          Smart Scanner
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-warning" id="barcodeModeBtn"><span>📊</span>Barcode Mode</button>
+        <button class="btn" id="ocrModeBtn"><span>📷</span>OCR/Text Mode</button>
+        <button class="btn btn-secondary" id="uploadBtn"><span>📁</span>Upload Image</button>
+        <button class="btn btn-success" id="manualBtn"><span>✍️</span>Manual Entry</button>
+        <button class="btn btn-secondary" id="exportBtn"><span>📥</span>Export CSV</button>
+      </div>
+
+      <div id="scannerContainer">
+        <video id="scannerVideo" autoplay playsinline></video>
+        <div class="scanner-overlay">
+          <div class="scanner-target"><div class="scanner-line"></div></div>
+          <div id="scannerStatus" style="margin-top:20px; background:rgba(0,0,0,0.7); color:white; padding:8px 16px; border-radius:20px;">
+            Ready to scan...
+          </div>
+        </div>
+
+        <div class="controls-overlay">
+          <div class="control-pill" id="zoomControl" style="display:none;">
+            <span>🔍 Zoom:</span>
+            <input type="range" id="zoomSlider" min="1" max="5" step="0.1" value="1" style="width:100px;">
+          </div>
+          <button class="btn btn-success" id="captureBtn" style="display:none; padding: 8px 20px; font-size: 0.9rem;">📸 Capture & Scan</button>
+          <button class="btn btn-secondary" id="stopScannerBtn" style="padding: 8px 20px; font-size: 0.9rem;">❌ Stop</button>
+        </div>
+      </div>
+
+      <canvas id="scanCanvas" style="display:none;"></canvas>
+      <input type="file" id="fileInput" accept="image/*" style="display:none;">
+
+      <div id="processingSection" style="display:none; margin-top:24px;">
+        <div id="ocrSpinner" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+        <div id="ocrProgress" style="font-weight:600; color:var(--primary); margin-bottom:16px;">Processing...</div>
+        <canvas id="imgCanvas" style="display:none;"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>💾</span>
+          Saved Records
+        </div>
+      </div>
+
+      <div class="form-grid" style="position:relative; z-index:1;">
+        <div>
+          <label for="searchInput">Search Records</label>
+          <input type="text" id="searchInput" placeholder="🔍 Search by IMEI, Model, Buyer or Seller..." class="input">
+        </div>
+        <div>
+          <label for="sortSelect">Sort Order</label>
+          <select id="sortSelect" class="select">
+            <option value="newest">📅 Newest First</option>
+            <option value="oldest">📅 Oldest First</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="chip-row">
+        <div class="mini-chip">📦 <span>Total Records</span> <strong id="totalRecordsChip">0</strong></div>
+        <div class="mini-chip">💸 <span>Total Purchase</span> <strong id="totalPurchaseChip">₹0.00</strong></div>
+        <div class="mini-chip">💰 <span>Total Sales</span> <strong id="totalSalesChip">₹0.00</strong></div>
+        <div class="mini-chip">📈 <span>Net Result</span> <strong id="totalNetChip">₹0.00</strong></div>
+      </div>
+
+      <div class="table-container">
+        <table class="dashboard-table">
+          <thead>
+            <tr>
+              <th>IMEI1</th>
+              <th>IMEI2</th>
+              <th>Model</th>
+              <th>Buyer</th>
+              <th>Buyer ID</th>
+              <th>Seller</th>
+              <th>Seller ID</th>
+              <th>Purchase</th>
+              <th>Selling</th>
+              <th>Net</th>
+              <th>Source</th>
+              <th>Date</th>
+              <th>Image</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="dashboardBody"></tbody>
+        </table>
+      </div>
+      <div class="mobile-scroll-hint">Swipe horizontally to view all table columns on mobile.</div>
+      <div id="pagination"></div>
+    </div>
+
+    <div class="card fade-slide">
+      <div class="card-header">
+        <div class="card-title">
+          <span>📈</span>
+          Sales Dashboard
+        </div>
+        <div class="section-pill" id="dashboardLiveLabel">Live profit &amp; loss overview</div>
+      </div>
+
+      <div class="analytics-stack">
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-label">Today</div>
+            <div class="summary-main count-up" id="todayNet" data-value="0">₹0.00</div>
+            <div class="summary-meta">
+              <div>Profit: <span class="profit-text count-up" id="todayProfit" data-value="0">₹0.00</span></div>
+              <div>Loss: <span class="loss-text count-up" id="todayLoss" data-value="0">₹0.00</span></div>
+              <div>Sales: <strong id="todayCount">0</strong></div>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-label">This Month</div>
+            <div class="summary-main count-up" id="monthNet" data-value="0">₹0.00</div>
+            <div class="summary-meta">
+              <div>Profit: <span class="profit-text count-up" id="monthProfit" data-value="0">₹0.00</span></div>
+              <div>Loss: <span class="loss-text count-up" id="monthLoss" data-value="0">₹0.00</span></div>
+              <div>Sales: <strong id="monthCount">0</strong></div>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-label">This Year</div>
+            <div class="summary-main count-up" id="yearNet" data-value="0">₹0.00</div>
+            <div class="summary-meta">
+              <div>Profit: <span class="profit-text count-up" id="yearProfit" data-value="0">₹0.00</span></div>
+              <div>Loss: <span class="loss-text count-up" id="yearLoss" data-value="0">₹0.00</span></div>
+              <div>Sales: <strong id="yearCount">0</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-panel">
+          <div class="selected-header">
+            <div>
+              <div class="chart-title">Selected period analytics</div>
+              <div class="selected-caption" id="selectedPeriodLabel">Showing today's profit and loss</div>
+            </div>
+          </div>
+
+          <div class="analytics-filter">
+            <div>
+              <label for="analyticsScope">View By</label>
+              <select id="analyticsScope" class="select">
+                <option value="day">Day</option>
+                <option value="month">Month</option>
+                <option value="year">Year</option>
+              </select>
+            </div>
+            <div id="scopeInputWrap">
+              <label for="analyticsDay">Select Date</label>
+              <input type="date" id="analyticsDay" class="input">
+              <input type="month" id="analyticsMonth" class="input" style="display:none;">
+              <select id="analyticsYear" class="select" style="display:none;"></select>
+            </div>
+            <button id="resetAnalyticsBtn" class="btn btn-secondary" type="button" style="margin-bottom:16px;">Reset to Today</button>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-label">Sales Count</div>
+              <div class="kpi-value count-up" id="selectedCount" data-value="0">0</div>
+              <div class="kpi-subtext">Transactions in selected period</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Purchase Total</div>
+              <div class="kpi-value count-up" id="selectedPurchase" data-value="0">₹0.00</div>
+              <div class="kpi-subtext">Total stock investment</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Selling Total</div>
+              <div class="kpi-value count-up" id="selectedSelling" data-value="0">₹0.00</div>
+              <div class="kpi-subtext">Gross sale amount</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Profit</div>
+              <div class="kpi-value count-up" id="selectedProfit" data-value="0">₹0.00</div>
+              <div class="kpi-subtext">Positive margin total</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Loss</div>
+              <div class="kpi-value count-up" id="selectedLoss" data-value="0">₹0.00</div>
+              <div class="kpi-subtext">Negative margin total</div>
+            </div>
+          </div>
+
+          <div class="chart-grid">
+            <div class="chart-panel" style="padding:18px;">
+              <div class="chart-title">Profit vs Loss bars</div>
+              <div class="split-bars">
+                <div class="split-bar-row">
+                  <div class="split-bar-label">Profit</div>
+                  <div class="split-bar-track"><div class="split-bar-fill profit" id="profitBarFill"></div></div>
+                  <div class="split-bar-value count-up" id="profitBarValue" data-value="0">₹0.00</div>
+                </div>
+                <div class="split-bar-row">
+                  <div class="split-bar-label">Loss</div>
+                  <div class="split-bar-track"><div class="split-bar-fill loss" id="lossBarFill"></div></div>
+                  <div class="split-bar-value count-up" id="lossBarValue" data-value="0">₹0.00</div>
+                </div>
+              </div>
+              <div class="dashboard-note">Bars animate automatically whenever you change the day, month, or year selection.</div>
+            </div>
+
+            <div class="chart-panel" style="padding:18px;">
+              <div class="chart-title" id="trendChartTitle">Trend bars</div>
+              <div class="trend-chart-wrap">
+                <div class="trend-chart" id="trendChart"></div>
+              </div>
+              <div class="dashboard-note" id="trendChartNote">Profit and loss are grouped by the selected period.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="manualModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeManualModal">&times;</span>
+      <h3 id="manualModalTitle">✍️ Manual IMEI Entry</h3>
+      <form id="manualForm">
+        <div class="form-grid">
+          <div>
+            <label for="manualIMEIInput">IMEI1 (15 digits) *</label>
+            <input type="text" id="manualIMEIInput" class="input" placeholder="Primary IMEI" maxlength="15" required>
+          </div>
+          <div>
+            <label for="manualIMEI2Input">IMEI2 (Optional)</label>
+            <input type="text" id="manualIMEI2Input" class="input" placeholder="Secondary IMEI" maxlength="15">
+          </div>
+        </div>
+
+        <label for="manualModelInput">Phone Model *</label>
+        <input type="text" id="manualModelInput" class="input" placeholder="e.g., iPhone 14 Pro, Samsung S23" required>
+
+        <div class="form-grid">
+          <div>
+            <label for="manualBuyerInput">Buyer Name *</label>
+            <input type="text" id="manualBuyerInput" class="input" placeholder="Enter buyer name" required>
+          </div>
+          <div>
+            <label for="manualBuyerIDInput">Buyer ID Card *</label>
+            <input type="text" id="manualBuyerIDInput" class="input" placeholder="Buyer ID Number" required>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div>
+            <label for="manualSellerInput">Seller Name *</label>
+            <input type="text" id="manualSellerInput" class="input" placeholder="Enter seller name" required>
+          </div>
+          <div>
+            <label for="manualSellerIDInput">Seller ID Card *</label>
+            <input type="text" id="manualSellerIDInput" class="input" placeholder="Seller ID Number" required>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div>
+            <label for="manualPurchaseAmount">Purchase Amount *</label>
+            <input type="number" id="manualPurchaseAmount" class="input" placeholder="Enter purchase amount" min="0" step="0.01" required>
+          </div>
+          <div>
+            <label for="manualSellingAmount">Selling Amount *</label>
+            <input type="number" id="manualSellingAmount" class="input" placeholder="Enter selling amount" min="0" step="0.01" required>
+          </div>
+        </div>
+        <div class="field-hint">These amounts are used in the dashboard to calculate sales, profit, and loss automatically.</div>
+
+        <button type="submit" id="manualSubmitBtn" class="btn btn-success" style="width:100%; margin-top:16px;">
+          <span>💾</span>
+          Save IMEI
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="scanResultModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeScanResultModal">&times;</span>
+      <h3>📝 Verify & Save Details</h3>
+
+      <div class="info">
+        <span>🎯</span>
+        <div id="scanFeedback"></div>
+      </div>
+
+      <form id="scanResultForm">
+        <div class="form-grid">
+          <div>
+            <label for="scanIMEI1">IMEI1 (Detected) *</label>
+            <input type="text" id="scanIMEI1" class="input" maxlength="15" required style="background:#f0f9ff; font-weight:bold;">
+          </div>
+          <div>
+            <label for="scanIMEI2">IMEI2 (Detected)</label>
+            <input type="text" id="scanIMEI2" class="input" maxlength="15" placeholder="Optional">
+          </div>
+        </div>
+
+        <label for="scanModel">Phone Model *</label>
+        <input type="text" id="scanModel" class="input" placeholder="e.g., iPhone 14 Pro, Samsung S23" required>
+
+        <div class="form-grid">
+          <div>
+            <label for="scanBuyer">Buyer Name *</label>
+            <input type="text" id="scanBuyer" class="input" placeholder="Enter buyer name" required>
+          </div>
+          <div>
+            <label for="scanBuyerID">Buyer ID Card *</label>
+            <input type="text" id="scanBuyerID" class="input" placeholder="Buyer ID Number" required>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div>
+            <label for="scanSeller">Seller Name *</label>
+            <input type="text" id="scanSeller" class="input" placeholder="Enter seller name" required>
+          </div>
+          <div>
+            <label for="scanSellerID">Seller ID Card *</label>
+            <input type="text" id="scanSellerID" class="input" placeholder="Seller ID Number" required>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div>
+            <label for="scanPurchaseAmount">Purchase Amount *</label>
+            <input type="number" id="scanPurchaseAmount" class="input" placeholder="Enter purchase amount" min="0" step="0.01" required>
+          </div>
+          <div>
+            <label for="scanSellingAmount">Selling Amount *</label>
+            <input type="number" id="scanSellingAmount" class="input" placeholder="Enter selling amount" min="0" step="0.01" required>
+          </div>
+        </div>
+        <div class="field-hint">Add the sale values here so the record flows straight into daily, monthly, and yearly analytics.</div>
+
+        <button type="submit" class="btn btn-success" style="width:100%; margin-top:16px;">
+          <span>💾</span>
+          Save Record
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
+  <script async src="https://docs.opencv.org/4.x/opencv.js" onload="onOpenCvReady()"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-database-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBrRJ92BBSBcFV7OYevuhWCho1erZFRh00",
+      authDomain: "imei-id.firebaseapp.com",
+      databaseURL: "https://imei-id-default-rtdb.firebaseio.com",
+      projectId: "imei-id",
+      storageBucket: "imei-id.firebasestorage.app",
+      messagingSenderId: "219784298923",
+      appId: "1:219784298923:web:b541963ba95fd12262d2ee",
+      measurementId: "G-3CE6NB7B4K"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let currentStream = null;
+    let cvReady = false;
+    let activeMode = null;
+    let currentImageData = null;
+    let track = null;
+    let imeiData = [];
+    let editingId = null;
+    let lastDetectedSource = 'upload';
+
+    let toastTimer = null;
+
+    function showToast(msg, type = 'info') {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.className = 'toast';
+      toast.style.background = type === 'error'
+        ? 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)'
+        : (type === 'success'
+          ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
+          : 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)');
+      toast.style.display = 'block';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.style.display = 'none', 3200);
+    }
+
+    function onOpenCvReady() {
+      cvReady = true;
+      console.log('OpenCV loaded');
+    }
+
+    function formatCurrency(value) {
+      const numeric = Number(value || 0);
+      return '₹' + numeric.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function formatCompactCurrency(value) {
+      const numeric = Number(value || 0);
+      return '₹' + numeric.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function safeNumber(value) {
+      const num = Number(value);
+      return Number.isFinite(num) ? num : 0;
+    }
+
+    function normalizeRecord(record) {
+      const purchaseAmount = safeNumber(record.purchaseAmount);
+      const sellingAmount = safeNumber(record.sellingAmount);
+      const net = sellingAmount - purchaseAmount;
+      return {
+        ...record,
+        purchaseAmount,
+        sellingAmount,
+        profitAmount: net > 0 ? net : 0,
+        lossAmount: net < 0 ? Math.abs(net) : 0,
+        netAmount: net
+      };
+    }
+
+    function animateValue(el, target, formatter = null) {
+      if (!el) return;
+      const end = Number(target || 0);
+      const start = Number(el.dataset.current || 0);
+      const duration = 650;
+      const startTime = performance.now();
+      el.dataset.current = end;
+
+      function frame(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = start + (end - start) * eased;
+        el.textContent = formatter ? formatter(value) : Math.round(value).toLocaleString('en-IN');
+        if (progress < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function animateCountText(id, value, mode = 'currency') {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (mode === 'count') animateValue(el, value, v => Math.round(v).toLocaleString('en-IN'));
+      else animateValue(el, value, v => formatCurrency(v));
+    }
+
+    function getRecordDate(record) {
+      return record.timestamp ? new Date(record.timestamp) : null;
+    }
+
+    function isSameDay(date, selectedDate) {
+      return date && selectedDate &&
+        date.getFullYear() === selectedDate.getFullYear() &&
+        date.getMonth() === selectedDate.getMonth() &&
+        date.getDate() === selectedDate.getDate();
+    }
+
+    function isSameMonth(date, selectedDate) {
+      return date && selectedDate &&
+        date.getFullYear() === selectedDate.getFullYear() &&
+        date.getMonth() === selectedDate.getMonth();
+    }
+
+    function isSameYear(date, selectedDate) {
+      return date && selectedDate && date.getFullYear() === selectedDate.getFullYear();
+    }
+
+    function getMetrics(records) {
+      return records.reduce((acc, item) => {
+        acc.count += 1;
+        acc.purchase += item.purchaseAmount;
+        acc.selling += item.sellingAmount;
+        acc.profit += item.profitAmount;
+        acc.loss += item.lossAmount;
+        acc.net += item.netAmount;
+        return acc;
+      }, { count: 0, purchase: 0, selling: 0, profit: 0, loss: 0, net: 0 });
+    }
+
+    function getRecordsForScope(scope, selectedDate, records = imeiData) {
+      return records.filter(record => {
+        const date = getRecordDate(record);
+        if (!date || Number.isNaN(date.getTime())) return false;
+        if (scope === 'day') return isSameDay(date, selectedDate);
+        if (scope === 'month') return isSameMonth(date, selectedDate);
+        return isSameYear(date, selectedDate);
+      });
+    }
+
+    function buildTrendData(scope, selectedDate, records) {
+      const list = [];
+
+      if (scope === 'day') {
+        for (let h = 0; h < 24; h++) {
+          const matched = records.filter(r => getRecordDate(r)?.getHours() === h);
+          list.push({ label: String(h).padStart(2, '0'), metrics: getMetrics(matched) });
+        }
+      } else if (scope === 'month') {
+        const year = selectedDate.getFullYear();
+        const month = selectedDate.getMonth();
+        const lastDay = new Date(year, month + 1, 0).getDate();
+        for (let d = 1; d <= lastDay; d++) {
+          const matched = records.filter(r => getRecordDate(r)?.getDate() === d);
+          list.push({ label: String(d), metrics: getMetrics(matched) });
+        }
+      } else {
+        const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        labels.forEach((label, monthIndex) => {
+          const matched = records.filter(r => getRecordDate(r)?.getMonth() === monthIndex);
+          list.push({ label, metrics: getMetrics(matched) });
+        });
+      }
+      return list;
+    }
+
+    function renderTrendChart(scope, selectedDate, records) {
+      const chart = document.getElementById('trendChart');
+      const title = document.getElementById('trendChartTitle');
+      const note = document.getElementById('trendChartNote');
+      const trendData = buildTrendData(scope, selectedDate, records);
+      const maxValue = Math.max(...trendData.map(item => Math.max(item.metrics.profit, item.metrics.loss)), 0);
+
+      title.textContent = scope === 'day'
+        ? 'Hourly trend bars'
+        : scope === 'month'
+          ? 'Daily trend bars'
+          : 'Monthly trend bars';
+
+      note.textContent = scope === 'day'
+        ? 'Each column pair represents one hour of the selected day.'
+        : scope === 'month'
+          ? 'Each column pair represents one day of the selected month.'
+          : 'Each column pair represents one month of the selected year.';
+
+      if (!records.length || maxValue === 0) {
+        chart.innerHTML = '<div class="trend-empty">No profit or loss data for this selection yet.</div>';
+        return;
+      }
+
+      chart.innerHTML = trendData.map(item => {
+        const profitHeight = item.metrics.profit > 0 ? Math.max((item.metrics.profit / maxValue) * 180, 6) : 4;
+        const lossHeight = item.metrics.loss > 0 ? Math.max((item.metrics.loss / maxValue) * 180, 6) : 4;
+        return `
+          <div class="trend-bar-group" title="${escapeHtml(item.label)} | Profit ${formatCompactCurrency(item.metrics.profit)} | Loss ${formatCompactCurrency(item.metrics.loss)}">
+            <div class="trend-bars-stack">
+              <div class="trend-bar profit" style="height:${profitHeight}px; opacity:${item.metrics.profit > 0 ? 1 : 0.25};"></div>
+              <div class="trend-bar loss" style="height:${lossHeight}px; opacity:${item.metrics.loss > 0 ? 1 : 0.25};"></div>
+            </div>
+            <div class="trend-label">${escapeHtml(item.label)}</div>
+          </div>`;
+      }).join('');
+    }
+
+    function updateProfitLossBars(metrics) {
+      const max = Math.max(metrics.profit, metrics.loss, 1);
+      const profitWidth = (metrics.profit / max) * 100;
+      const lossWidth = (metrics.loss / max) * 100;
+      const profitFill = document.getElementById('profitBarFill');
+      const lossFill = document.getElementById('lossBarFill');
+      profitFill.style.width = profitWidth + '%';
+      lossFill.style.width = lossWidth + '%';
+      animateCountText('profitBarValue', metrics.profit, 'currency');
+      animateCountText('lossBarValue', metrics.loss, 'currency');
+    }
+
+    function setChipText(id, value, isCurrency = false) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = isCurrency ? formatCurrency(value) : String(value).toLocaleString('en-IN');
+      if (id === 'totalNetChip') {
+        el.style.color = Number(value) >= 0 ? 'var(--success-dark)' : 'var(--danger-dark)';
+      }
+    }
+
+    function refreshTopChips(records = imeiData) {
+      const metrics = getMetrics(records);
+      setChipText('totalRecordsChip', metrics.count, false);
+      setChipText('totalPurchaseChip', metrics.purchase, true);
+      setChipText('totalSalesChip', metrics.selling, true);
+      setChipText('totalNetChip', metrics.net, true);
+    }
+
+    function applyResponsiveTableState() {
+      const wrap = document.querySelector('.table-container');
+      if (!wrap) return;
+      wrap.classList.toggle('is-scrollable', wrap.scrollWidth > wrap.clientWidth + 10);
+    }
+
+    function setSummaryCard(prefix, metrics) {
+      animateCountText(prefix + 'Net', metrics.net, 'currency');
+      animateCountText(prefix + 'Profit', metrics.profit, 'currency');
+      animateCountText(prefix + 'Loss', metrics.loss, 'currency');
+      document.getElementById(prefix + 'Count').textContent = metrics.count.toLocaleString('en-IN');
+      const netEl = document.getElementById(prefix + 'Net');
+      netEl.style.color = metrics.net >= 0 ? 'var(--dark)' : 'var(--danger-dark)';
+    }
+
+    function getSelectedAnalyticsDate() {
+      const scope = document.getElementById('analyticsScope').value;
+      if (scope === 'day') {
+        const value = document.getElementById('analyticsDay').value;
+        return value ? new Date(value + 'T00:00:00') : new Date();
+      }
+      if (scope === 'month') {
+        const value = document.getElementById('analyticsMonth').value;
+        return value ? new Date(value + '-01T00:00:00') : new Date();
+      }
+      const yearValue = document.getElementById('analyticsYear').value;
+      return new Date(Number(yearValue || new Date().getFullYear()), 0, 1);
+    }
+
+    function refreshAnalytics() {
+      const now = new Date();
+      setSummaryCard('today', getMetrics(getRecordsForScope('day', now)));
+      setSummaryCard('month', getMetrics(getRecordsForScope('month', now)));
+      setSummaryCard('year', getMetrics(getRecordsForScope('year', now)));
+
+      const scope = document.getElementById('analyticsScope').value;
+      const selectedDate = getSelectedAnalyticsDate();
+      const selectedRecords = getRecordsForScope(scope, selectedDate);
+      const metrics = getMetrics(selectedRecords);
+
+      const label = scope === 'day'
+        ? selectedDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+        : scope === 'month'
+          ? selectedDate.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })
+          : String(selectedDate.getFullYear());
+
+      document.getElementById('selectedPeriodLabel').textContent = `Showing ${scope} analytics for ${label}`;
+      document.getElementById('dashboardLiveLabel').textContent = `Default cards: Today, This Month, This Year`;
+
+      animateCountText('selectedCount', metrics.count, 'count');
+      animateCountText('selectedPurchase', metrics.purchase, 'currency');
+      animateCountText('selectedSelling', metrics.selling, 'currency');
+      animateCountText('selectedProfit', metrics.profit, 'currency');
+      animateCountText('selectedLoss', metrics.loss, 'currency');
+
+      updateProfitLossBars(metrics);
+      renderTrendChart(scope, selectedDate, selectedRecords);
+    }
+
+    function syncScopeInput() {
+      const scope = document.getElementById('analyticsScope').value;
+      const dayInput = document.getElementById('analyticsDay');
+      const monthInput = document.getElementById('analyticsMonth');
+      const yearInput = document.getElementById('analyticsYear');
+      const wrapLabel = document.querySelector('label[for="analyticsDay"]');
+
+      dayInput.style.display = scope === 'day' ? 'block' : 'none';
+      monthInput.style.display = scope === 'month' ? 'block' : 'none';
+      yearInput.style.display = scope === 'year' ? 'block' : 'none';
+      wrapLabel.textContent = scope === 'day' ? 'Select Date' : scope === 'month' ? 'Select Month' : 'Select Year';
+      refreshAnalytics();
+    }
+
+    function populateYearOptions() {
+      const yearSelect = document.getElementById('analyticsYear');
+      const years = new Set(imeiData.map(item => getRecordDate(item)?.getFullYear()).filter(Boolean));
+      const currentYear = new Date().getFullYear();
+      years.add(currentYear);
+      const sorted = Array.from(years).sort((a, b) => b - a);
+      yearSelect.innerHTML = sorted.map(year => `<option value="${year}">${year}</option>`).join('');
+      yearSelect.value = String(currentYear);
+    }
+
+    async function startCamera(mode) {
+      stopScanner();
+      activeMode = mode;
+      lastDetectedSource = mode === 'barcode' ? 'barcode' : 'camera';
+
+      const container = document.getElementById('scannerContainer');
+      const video = document.getElementById('scannerVideo');
+      const status = document.getElementById('scannerStatus');
+      const zoomControl = document.getElementById('zoomControl');
+      const captureBtn = document.getElementById('captureBtn');
+
+      container.style.display = 'block';
+      document.getElementById('processingSection').style.display = 'none';
+
+      try {
+        const constraints = {
+          video: {
+            facingMode: 'environment',
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
+            focusMode: 'continuous'
+          }
+        };
+
+        currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = currentStream;
+
+        track = currentStream.getVideoTracks()[0];
+        const caps = track.getCapabilities();
+        if (caps.zoom) {
+          zoomControl.style.display = 'flex';
+          const slider = document.getElementById('zoomSlider');
+          slider.min = caps.zoom.min;
+          slider.max = caps.zoom.max;
+          slider.step = caps.zoom.step;
+          slider.value = caps.zoom.min;
+          slider.oninput = () => track.applyConstraints({ advanced: [{ zoom: Number(slider.value) }] });
+        } else {
+          zoomControl.style.display = 'none';
+        }
+
+        if (mode === 'barcode') {
+          status.textContent = 'Scanning for Barcode...';
+          captureBtn.style.display = 'none';
+          initQuagga();
+        } else {
+          status.textContent = 'Align text in box & Capture';
+          captureBtn.style.display = 'block';
+        }
+      } catch (err) {
+        console.error(err);
+        showToast('Camera error: ' + err.message, 'error');
+        container.style.display = 'none';
+      }
+    }
+
+    function stopScanner() {
+      if (currentStream) {
+        currentStream.getTracks().forEach(t => t.stop());
+        currentStream = null;
+      }
+      try { Quagga.stop(); } catch (e) {}
+      document.getElementById('scannerContainer').style.display = 'none';
+      activeMode = null;
+    }
+
+    document.getElementById('stopScannerBtn').onclick = stopScanner;
+    document.getElementById('barcodeModeBtn').onclick = () => startCamera('barcode');
+    document.getElementById('ocrModeBtn').onclick = () => startCamera('ocr');
+
+    function initQuagga() {
+      Quagga.init({
+        inputStream: {
+          name: 'Live',
+          type: 'LiveStream',
+          target: document.querySelector('#scannerVideo'),
+          constraints: { width: 1280, height: 720, facingMode: 'environment' }
+        },
+        decoder: {
+          readers: ['code_128_reader', 'ean_reader', 'code_39_reader', 'upc_reader'],
+          multiple: false
+        },
+        locate: true,
+        patchSize: 'medium',
+        halfSample: false
+      }, function(err) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        Quagga.start();
+      });
+
+      let detectCount = 0;
+      let lastCode = '';
+
+      Quagga.onDetected(function(result) {
+        const code = result.codeResult.code;
+        const digits = code.replace(/\D/g, '');
+        if (digits.length >= 14 && digits.length <= 16) {
+          if (code === lastCode) detectCount++;
+          else { detectCount = 1; lastCode = code; }
+          if (detectCount > 2) {
+            Quagga.stop();
+            lastDetectedSource = 'barcode';
+            handleScanSuccess({ imei1: digits.substring(0, 15) });
+          }
+        }
+      });
+    }
+
+    document.getElementById('captureBtn').onclick = () => {
+      const video = document.getElementById('scannerVideo');
+      const canvas = document.getElementById('scanCanvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      const imgData = canvas.toDataURL('image/jpeg', 0.9);
+      lastDetectedSource = 'camera';
+      stopScanner();
+      processImageForOCR(imgData);
+    };
+
+    document.getElementById('uploadBtn').onclick = () => document.getElementById('fileInput').click();
+    document.getElementById('fileInput').onchange = (e) => {
+      if (e.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          lastDetectedSource = 'upload';
+          processImageForOCR(evt.target.result);
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    };
+
+    async function processImageForOCR(base64Image) {
+      document.getElementById('processingSection').style.display = 'block';
+      const displayCanvas = document.getElementById('imgCanvas');
+      displayCanvas.style.display = 'block';
+
+      const img = new Image();
+      img.onload = async () => {
+        const processedBase64 = enhanceImage(img, displayCanvas);
+        currentImageData = processedBase64;
+        document.getElementById('ocrProgress').textContent = 'Analyzing Text...';
+        const worker = await Tesseract.createWorker('eng');
+        const ret = await worker.recognize(processedBase64);
+        await worker.terminate();
+        const result = smartParseIMEI(ret.data.text);
+
+        if (result.imei1) {
+          handleScanSuccess(result);
+        } else {
+          showToast('❌ No valid IMEI found. Try again.', 'error');
+          document.getElementById('processingSection').style.display = 'none';
+        }
+      };
+      img.src = base64Image;
+    }
+
+    function enhanceImage(imgElement, outputCanvas) {
+      if (!cvReady) {
+        outputCanvas.width = imgElement.width;
+        outputCanvas.height = imgElement.height;
+        outputCanvas.getContext('2d').drawImage(imgElement, 0, 0);
+        return imgElement.src;
+      }
+
+      try {
+        let src = cv.imread(imgElement);
+        let dst = new cv.Mat();
+        cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
+        cv.GaussianBlur(dst, dst, new cv.Size(3, 3), 0);
+        cv.adaptiveThreshold(dst, dst, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2);
+        if (dst.cols > 1500) {
+          let scale = 1500 / dst.cols;
+          let dsize = new cv.Size(Math.round(dst.cols * scale), Math.round(dst.rows * scale));
+          cv.resize(dst, dst, dsize, 0, 0, cv.INTER_AREA);
+        }
+        cv.imshow(outputCanvas, dst);
+        const dataUrl = outputCanvas.toDataURL();
+        src.delete();
+        dst.delete();
+        return dataUrl;
+      } catch (e) {
+        console.error('OpenCV processing failed', e);
+        return imgElement.src;
+      }
+    }
+
+    function smartParseIMEI(text) {
+      const lines = text.split(/\r?\n/);
+      const candidates = [];
+      let imei1 = null;
+      let imei2 = null;
+      const strictIMEI = /[0-9]{15}/g;
+
+      lines.forEach((line, index) => {
+        const matches = line.match(strictIMEI);
+        if (matches) {
+          matches.forEach(num => {
+            const upperLine = line.toUpperCase();
+            const isIMEI2Label = upperLine.includes('IMEI2') || upperLine.includes('SIM2') || upperLine.includes('SECOND');
+            const isIMEI1Label = upperLine.includes('IMEI1') || upperLine.includes('SIM1') || upperLine.includes('FIRST') || upperLine.includes('IMEI:');
+            candidates.push({ num, isIMEI2Label, isIMEI1Label, index });
+          });
+        }
+      });
+
+      const uniqueCandidates = [...new Map(candidates.map(item => [item.num, item])).values()];
+      if (uniqueCandidates.length === 0) return {};
+
+      const explicitIMEI1 = uniqueCandidates.find(c => c.isIMEI1Label);
+      const explicitIMEI2 = uniqueCandidates.find(c => c.isIMEI2Label);
+      if (explicitIMEI1) imei1 = explicitIMEI1.num;
+      if (explicitIMEI2) imei2 = explicitIMEI2.num;
+
+      if (!imei1 && uniqueCandidates.length > 0) {
+        const remaining = uniqueCandidates.filter(c => c.num !== imei2);
+        if (remaining.length > 0) imei1 = remaining[0].num;
+      }
+
+      if (!imei2 && uniqueCandidates.length > 1) {
+        const remaining = uniqueCandidates.filter(c => c.num !== imei1);
+        if (remaining.length > 0) imei2 = remaining[0].num;
+      }
+
+      return { imei1, imei2 };
+    }
+
+    function handleScanSuccess(data) {
+      document.getElementById('processingSection').style.display = 'none';
+      const modal = document.getElementById('scanResultModal');
+      document.getElementById('scanIMEI1').value = data.imei1 || '';
+      document.getElementById('scanIMEI2').value = data.imei2 || '';
+      document.getElementById('scanModel').value = '';
+      document.getElementById('scanBuyer').value = '';
+      document.getElementById('scanBuyerID').value = '';
+      document.getElementById('scanSeller').value = '';
+      document.getElementById('scanSellerID').value = '';
+      document.getElementById('scanPurchaseAmount').value = '';
+      document.getElementById('scanSellingAmount').value = '';
+
+      const feedback = document.getElementById('scanFeedback');
+      if (data.imei1 && data.imei2) {
+        feedback.innerHTML = `✅ <strong>Success!</strong> Found Dual IMEIs.<br><small>${escapeHtml(data.imei1)} / ${escapeHtml(data.imei2)}</small>`;
+      } else {
+        feedback.innerHTML = `✅ <strong>Success!</strong> Found IMEI.<br><small>${escapeHtml(data.imei1 || '')}</small>`;
+      }
+      modal.style.display = 'block';
+    }
+
+    function resetManualForm() {
+      document.getElementById('manualForm').reset();
+      editingId = null;
+      document.getElementById('manualModalTitle').innerHTML = '✍️ Manual IMEI Entry';
+      document.getElementById('manualSubmitBtn').innerHTML = '<span>💾</span> Save IMEI';
+    }
+
+    function getFormPayload(isManual) {
+      if (isManual) {
+        return {
+          imei1: document.getElementById('manualIMEIInput').value.trim(),
+          imei2: document.getElementById('manualIMEI2Input').value.trim(),
+          model: document.getElementById('manualModelInput').value.trim(),
+          buyer: document.getElementById('manualBuyerInput').value.trim(),
+          buyerId: document.getElementById('manualBuyerIDInput').value.trim(),
+          seller: document.getElementById('manualSellerInput').value.trim(),
+          sellerId: document.getElementById('manualSellerIDInput').value.trim(),
+          purchaseAmount: safeNumber(document.getElementById('manualPurchaseAmount').value),
+          sellingAmount: safeNumber(document.getElementById('manualSellingAmount').value)
+        };
+      }
+      return {
+        imei1: document.getElementById('scanIMEI1').value.trim(),
+        imei2: document.getElementById('scanIMEI2').value.trim(),
+        model: document.getElementById('scanModel').value.trim(),
+        buyer: document.getElementById('scanBuyer').value.trim(),
+        buyerId: document.getElementById('scanBuyerID').value.trim(),
+        seller: document.getElementById('scanSeller').value.trim(),
+        sellerId: document.getElementById('scanSellerID').value.trim(),
+        purchaseAmount: safeNumber(document.getElementById('scanPurchaseAmount').value),
+        sellingAmount: safeNumber(document.getElementById('scanSellingAmount').value)
+      };
+    }
+
+    document.getElementById('manualBtn').onclick = () => {
+      resetManualForm();
+      document.getElementById('manualModal').style.display = 'block';
+    };
+
+    document.querySelectorAll('.close-modal').forEach(btn => {
+      btn.onclick = () => {
+        document.getElementById('manualModal').style.display = 'none';
+        document.getElementById('scanResultModal').style.display = 'none';
+        resetManualForm();
+      };
+    });
+
+    window.onclick = (event) => {
+      if (event.target.classList.contains('modal')) {
+        document.getElementById('manualModal').style.display = 'none';
+        document.getElementById('scanResultModal').style.display = 'none';
+        resetManualForm();
+      }
+    };
+
+    document.getElementById('manualForm').onsubmit = (e) => handleFormSubmit(e, 'manual');
+    document.getElementById('scanResultForm').onsubmit = (e) => handleFormSubmit(e, lastDetectedSource);
+
+    async function handleFormSubmit(e, source) {
+      e.preventDefault();
+      const isManual = source === 'manual';
+      const payload = getFormPayload(isManual);
+
+      if (!payload.imei1 || payload.imei1.replace(/\D/g, '').length !== 15) {
+        showToast('IMEI1 must be 15 digits', 'error');
+        return;
+      }
+
+      payload.imei1 = payload.imei1.replace(/\D/g, '').slice(0, 15);
+      payload.imei2 = payload.imei2 ? payload.imei2.replace(/\D/g, '').slice(0, 15) : '';
+
+      if (payload.purchaseAmount < 0 || payload.sellingAmount < 0) {
+        showToast('Amounts cannot be negative', 'error');
+        return;
+      }
+
+      if (!Number.isFinite(payload.purchaseAmount) || !Number.isFinite(payload.sellingAmount)) {
+        showToast('Enter valid purchase and selling amounts', 'error');
+        return;
+      }
+
+      let imgUrl = isManual ? null : currentImageData;
+      if (editingId && isManual) {
+        const existing = imeiData.find(r => r._id === editingId);
+        if (existing) imgUrl = existing.imagePreviewURL || null;
+      }
+
+      const record = {
+        ...payload,
+        source,
+        timestamp: editingId ? (imeiData.find(r => r._id === editingId)?.timestamp || new Date().toISOString()) : new Date().toISOString(),
+        imagePreviewURL: imgUrl
+      };
+
+      try {
+        if (editingId) {
+          await db.ref('imeis/' + editingId).update(record);
+          showToast('✅ Record Updated', 'success');
+        } else {
+          await db.ref('imeis').push(record);
+          showToast('✅ Saved Successfully', 'success');
+        }
+
+        document.getElementById('manualModal').style.display = 'none';
+        document.getElementById('scanResultModal').style.display = 'none';
+        resetManualForm();
+        await loadDashboard();
+      } catch (err) {
+        showToast('Save Failed: ' + err.message, 'error');
+      }
+    }
+
+    async function loadDashboard() {
+      try {
+        const snap = await db.ref('imeis').once('value');
+        imeiData = [];
+        snap.forEach(child => {
+          let value = normalizeRecord({ ...child.val(), _id: child.key });
+          imeiData.push(value);
+        });
+        populateYearOptions();
+        renderDashboard();
+        refreshTopChips();
+        refreshAnalytics();
+      } catch (err) {
+        console.error(err);
+        showToast('Failed to load records', 'error');
+      }
+    }
+
+    function renderDashboard(page = 1) {
+      let rows = '';
+      let data = imeiData.slice();
+
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      if (q) {
+        data = data.filter(d =>
+          (d.imei1 && d.imei1.toLowerCase().includes(q)) ||
+          (d.imei2 && d.imei2.toLowerCase().includes(q)) ||
+          (d.model && d.model.toLowerCase().includes(q)) ||
+          (d.buyer && d.buyer.toLowerCase().includes(q)) ||
+          (d.seller && d.seller.toLowerCase().includes(q))
+        );
+      }
+
+      const sort = document.getElementById('sortSelect').value;
+      data.sort((a, b) => sort === 'oldest' ? a.timestamp.localeCompare(b.timestamp) : b.timestamp.localeCompare(a.timestamp));
+
+      refreshTopChips(data);
+
+      const itemsPerPage = 8;
+      const pages = Math.max(1, Math.ceil(data.length / itemsPerPage));
+      const currentPage = Math.min(page, pages);
+      const paged = data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+      paged.forEach(d => {
+        const time = d.timestamp ? d.timestamp.split('T')[0] : '-';
+        const img = d.imagePreviewURL
+          ? `<img src="${d.imagePreviewURL}" class="thumbnail" onclick="viewImage('${d.imagePreviewURL.replace(/'/g, "\\'")}')">`
+          : '—';
+        const netClass = d.netAmount >= 0 ? 'net-chip-positive' : 'net-chip-negative';
+
+        rows += `
+          <tr>
+            <td><code>${escapeHtml(d.imei1)}</code></td>
+            <td><code>${escapeHtml(d.imei2 || '-')}</code></td>
+            <td>${escapeHtml(d.model)}</td>
+            <td>${escapeHtml(d.buyer)}</td>
+            <td><small>${escapeHtml(d.buyerId)}</small></td>
+            <td>${escapeHtml(d.seller)}</td>
+            <td><small>${escapeHtml(d.sellerId)}</small></td>
+            <td><span class="money-chip">${formatCurrency(d.purchaseAmount)}</span></td>
+            <td><span class="money-chip">${formatCurrency(d.sellingAmount)}</span></td>
+            <td><span class="money-chip ${netClass}">${d.netAmount >= 0 ? '+' : '-'}${formatCurrency(Math.abs(d.netAmount)).replace('₹', '₹')}</span></td>
+            <td>${escapeHtml(d.source)}</td>
+            <td>${escapeHtml(time)}</td>
+            <td>${img}</td>
+            <td>
+              <div class="action-group">
+                <button class="action-btn btn-edit" onclick="editRecord('${d._id}')" title="Edit Record">✏️</button>
+                <button class="action-btn btn-delete" onclick="deleteRecord('${d._id}')" title="Delete Record">🗑️</button>
+              </div>
+            </td>
+          </tr>`;
+      });
+
+      document.getElementById('dashboardBody').innerHTML = rows || '<tr><td colspan="14" style="text-align:center;padding:20px;">No records found</td></tr>';
+
+      let pagn = '';
+      for (let i = 1; i <= pages; i++) {
+        pagn += `<button onclick="renderDashboard(${i})" style="opacity:${i===currentPage?1:0.6}; border-color:${i===currentPage?'var(--primary)':'var(--gray-light)'}; background:${i===currentPage?'var(--primary)':'white'}; color:${i===currentPage?'white':'var(--dark)'}">${i}</button>`;
+      }
+      document.getElementById('pagination').innerHTML = pagn;
+      requestAnimationFrame(applyResponsiveTableState);
+    }
+
+    window.editRecord = (id) => {
+      const record = imeiData.find(r => r._id === id);
+      if (!record) return;
+      editingId = id;
+      document.getElementById('manualIMEIInput').value = record.imei1;
+      document.getElementById('manualIMEI2Input').value = record.imei2 || '';
+      document.getElementById('manualModelInput').value = record.model;
+      document.getElementById('manualBuyerInput').value = record.buyer;
+      document.getElementById('manualBuyerIDInput').value = record.buyerId;
+      document.getElementById('manualSellerInput').value = record.seller;
+      document.getElementById('manualSellerIDInput').value = record.sellerId;
+      document.getElementById('manualPurchaseAmount').value = record.purchaseAmount;
+      document.getElementById('manualSellingAmount').value = record.sellingAmount;
+      document.getElementById('manualModalTitle').innerHTML = '✏️ Edit IMEI Record';
+      document.getElementById('manualSubmitBtn').innerHTML = '<span>💾</span> Update Record';
+      document.getElementById('manualModal').style.display = 'block';
+    };
+
+    window.viewImage = (url) => {
+      const win = window.open('');
+      if (win) win.document.write(`<img src="${url}" style="width:100%">`);
+    };
+
+    window.deleteRecord = async (id) => {
+      if (confirm('Are you sure you want to delete this record?')) {
+        try {
+          await db.ref('imeis/' + id).remove();
+          showToast('Deleted successfully', 'success');
+          await loadDashboard();
+        } catch (e) {
+          showToast('Delete failed', 'error');
+        }
+      }
+    };
+
+    document.getElementById('searchInput').oninput = () => renderDashboard();
+    document.getElementById('sortSelect').onchange = () => renderDashboard();
+
+    document.getElementById('exportBtn').onclick = () => {
+      const lines = [[
+        'IMEI1', 'IMEI2', 'Model', 'Buyer', 'BuyerID', 'Seller', 'SellerID',
+        'PurchaseAmount', 'SellingAmount', 'NetAmount', 'ProfitAmount', 'LossAmount', 'Source', 'Date'
+      ]];
+
+      imeiData.forEach(d => lines.push([
+        `"${d.imei1}"`,
+        `"${d.imei2 || ''}"`,
+        `"${String(d.model || '').replace(/"/g, '""')}"`,
+        `"${String(d.buyer || '').replace(/"/g, '""')}"`,
+        `"${String(d.buyerId || '').replace(/"/g, '""')}"`,
+        `"${String(d.seller || '').replace(/"/g, '""')}"`,
+        `"${String(d.sellerId || '').replace(/"/g, '""')}"`,
+        d.purchaseAmount,
+        d.sellingAmount,
+        d.netAmount,
+        d.profitAmount,
+        d.lossAmount,
+        d.source,
+        d.timestamp
+      ]));
+
+      const csv = lines.map(r => r.join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'imei_export.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+
+    document.getElementById('analyticsScope').addEventListener('change', syncScopeInput);
+    document.getElementById('analyticsDay').addEventListener('change', refreshAnalytics);
+    document.getElementById('analyticsMonth').addEventListener('change', refreshAnalytics);
+    document.getElementById('analyticsYear').addEventListener('change', refreshAnalytics);
+    document.getElementById('resetAnalyticsBtn').addEventListener('click', () => {
+      const now = new Date();
+      document.getElementById('analyticsScope').value = 'day';
+      document.getElementById('analyticsDay').value = now.toISOString().split('T')[0];
+      document.getElementById('analyticsMonth').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+      document.getElementById('analyticsYear').value = String(now.getFullYear());
+      syncScopeInput();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.getElementById('manualModal').style.display = 'none';
+        document.getElementById('scanResultModal').style.display = 'none';
+        resetManualForm();
+      }
+    });
+
+    window.addEventListener('resize', () => requestAnimationFrame(applyResponsiveTableState));
+
+    window.onload = () => {
+      const now = new Date();
+      document.getElementById('analyticsDay').value = now.toISOString().split('T')[0];
+      document.getElementById('analyticsMonth').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+      document.getElementById('analyticsYear').innerHTML = `<option value="${now.getFullYear()}">${now.getFullYear()}</option>`;
+      document.getElementById('analyticsYear').value = String(now.getFullYear());
+      loadDashboard();
+      syncScopeInput();
+    };
+  </script>
+</body>
+</html>
