@@ -18,31 +18,31 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
 
   <style>
     :root {
-      --primary: #5b6cff;
-      --primary-dark: #4255f4;
-      --primary-light: #8da2ff;
-      --success: #10b981;
-      --success-dark: #059669;
+      --primary: #4966ff;
+      --primary-dark: #3047d8;
+      --primary-light: #9bb2ff;
+      --success: #13b981;
+      --success-dark: #069669;
       --danger: #ef4444;
       --danger-dark: #dc2626;
       --warning: #f59e0b;
       --dark: #0f172a;
-      --dark-soft: #172033;
+      --dark-soft: #182338;
       --dark-light: #1e293b;
       --gray: #64748b;
       --gray-light: #cbd5e1;
       --gray-soft: #e2e8f0;
-      --gray-faint: #f1f5f9;
-      --bg: #f5f7ff;
-      --card-bg: rgba(255,255,255,0.82);
+      --gray-faint: #f7f9ff;
+      --bg: #f4f7ff;
+      --card-bg: rgba(255,255,255,0.88);
       --card-solid: #ffffff;
-      --panel-bg: rgba(248,250,255,0.78);
-      --border: rgba(148, 163, 184, 0.2);
-      --shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
-      --shadow-lg: 0 24px 80px rgba(15, 23, 42, 0.16);
-      --shadow-soft: 0 10px 30px rgba(91, 108, 255, 0.12);
+      --panel-bg: rgba(247,250,255,0.88);
+      --border: rgba(148, 163, 184, 0.18);
+      --shadow: 0 12px 34px rgba(15, 23, 42, 0.07);
+      --shadow-lg: 0 28px 72px rgba(15, 23, 42, 0.12);
+      --shadow-soft: 0 10px 26px rgba(73, 102, 255, 0.1);
       --border-radius: 18px;
-      --border-radius-lg: 28px;
+      --border-radius-lg: 26px;
       --motion: 320ms cubic-bezier(0.22, 1, 0.36, 1);
     }
 
@@ -59,9 +59,9 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
       min-height: 100vh;
       margin: 0;
       background:
-        radial-gradient(circle at top left, rgba(91,108,255,0.18), transparent 28%),
-        radial-gradient(circle at top right, rgba(16,185,129,0.12), transparent 22%),
-        linear-gradient(180deg, #eef2ff 0%, #f8fafc 46%, #eef4ff 100%);
+        radial-gradient(circle at top left, rgba(73,102,255,0.14), transparent 26%),
+        radial-gradient(circle at top right, rgba(155,178,255,0.18), transparent 20%),
+        linear-gradient(180deg, #f7f9ff 0%, #ffffff 38%, #f3f7ff 100%);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       color: var(--dark);
       overflow-x: hidden;
@@ -97,9 +97,9 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
     }
 
     .container {
-      max-width: 1440px;
+      max-width: 1380px;
       margin: 0 auto;
-      padding: 28px 22px 52px;
+      padding: 22px 18px 42px;
       position: relative;
       z-index: 1;
     }
@@ -107,8 +107,8 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
     .header {
       position: relative;
       text-align: center;
-      margin-bottom: 26px;
-      padding: 22px 18px 10px;
+      margin-bottom: 18px;
+      padding: 16px 12px 4px;
       animation: fadeInDown 0.7s var(--motion);
     }
 
@@ -123,20 +123,20 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
     }
 
     .header p {
-      font-size: clamp(0.95rem, 1.2vw, 1.08rem);
-      color: #475569;
+      font-size: clamp(0.92rem, 1.1vw, 1.02rem);
+      color: #617089;
       font-weight: 600;
     }
 
     .card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.76) 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(249,251,255,0.9) 100%);
       border-radius: var(--border-radius-lg);
       box-shadow: var(--shadow-lg);
-      padding: 26px;
-      margin-bottom: 22px;
+      padding: 22px;
+      margin-bottom: 18px;
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255,255,255,0.75);
+      border: 1px solid rgba(225,232,255,0.95);
       transition: transform var(--motion), box-shadow var(--motion), border-color var(--motion);
       animation: fadeInUp 0.65s var(--motion);
       position: relative;
@@ -147,24 +147,24 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.42), transparent 30%, transparent 70%, rgba(91,108,255,0.04));
+      background: linear-gradient(135deg, rgba(255,255,255,0.55), transparent 32%, transparent 72%, rgba(73,102,255,0.04));
       pointer-events: none;
     }
 
     .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 28px 80px rgba(15,23,42,0.14);
-      border-color: rgba(91,108,255,0.18);
+      transform: translateY(-2px);
+      box-shadow: 0 24px 58px rgba(15,23,42,0.12);
+      border-color: rgba(73,102,255,0.16);
     }
 
     .card-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 22px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
-      gap: 14px;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(208, 218, 244, 0.9);
+      gap: 12px;
       flex-wrap: wrap;
       position: relative;
       z-index: 1;
@@ -184,8 +184,8 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
     .btn-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 24px;
+      gap: 10px;
+      margin-bottom: 18px;
       position: relative;
       z-index: 1;
     }
@@ -198,16 +198,16 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
       color: white;
       font-weight: 700;
-      padding: 14px 22px;
+      padding: 12px 18px;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.16);
       cursor: pointer;
       transition: transform var(--motion), box-shadow var(--motion), filter var(--motion), background var(--motion);
-      font-size: 0.95rem;
-      box-shadow: 0 10px 24px rgba(91, 108, 255, 0.28);
+      font-size: 0.92rem;
+      box-shadow: 0 10px 24px rgba(73, 102, 255, 0.22);
       position: relative;
       overflow: hidden;
-      min-height: 48px;
+      min-height: 46px;
       isolation: isolate;
     }
 
@@ -360,16 +360,16 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
 
     .input, .select {
       width: 100%;
-      padding: 14px 16px;
+      padding: 13px 14px;
       border-radius: 14px;
-      border: 1.5px solid rgba(148, 163, 184, 0.28);
-      font-size: 0.95rem;
+      border: 1.5px solid rgba(208, 218, 244, 0.92);
+      font-size: 0.94rem;
       font-family: inherit;
       transition: border-color var(--motion), box-shadow var(--motion), transform var(--motion), background var(--motion);
-      background: rgba(255,255,255,0.92);
+      background: rgba(255,255,255,0.96);
       color: var(--dark);
-      margin-bottom: 16px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
+      margin-bottom: 14px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
     }
 
     .input::placeholder { color: #94a3b8; }
@@ -726,7 +726,7 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
 
     .analytics-stack {
       display: grid;
-      gap: 22px;
+      gap: 16px;
       position: relative;
       z-index: 1;
     }
@@ -734,15 +734,15 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
     .summary-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
+      gap: 12px;
     }
 
     .summary-card, .kpi-card, .chart-panel {
-      background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(247,250,255,0.84) 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(247,250,255,0.94) 100%);
       border-radius: 20px;
-      border: 1px solid rgba(148, 163, 184, 0.16);
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
-      padding: 20px;
+      border: 1px solid rgba(220, 227, 248, 0.96);
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.05);
+      padding: 18px;
       position: relative;
       overflow: hidden;
       transition: transform var(--motion), box-shadow var(--motion), border-color var(--motion);
@@ -770,22 +770,22 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
     .summary-label,
     .kpi-label,
     .chart-title {
-      font-size: 0.8rem;
+      font-size: 0.76rem;
       font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--gray);
-      margin-bottom: 10px;
+      color: #7b8aa5;
+      margin-bottom: 8px;
     }
 
     .summary-main,
     .kpi-value {
       font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-      font-size: clamp(1.35rem, 2vw, 1.76rem);
+      font-size: clamp(1.28rem, 1.8vw, 1.64rem);
       font-weight: 800;
       color: var(--dark);
-      line-height: 1.08;
-      margin-bottom: 10px;
+      line-height: 1.06;
+      margin-bottom: 8px;
       letter-spacing: -0.03em;
       font-variant-numeric: tabular-nums;
     }
@@ -827,8 +827,8 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 14px;
-      margin-bottom: 24px;
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
     .kpi-card:nth-child(4)::before { background: linear-gradient(90deg, var(--success), #34d399); }
@@ -836,8 +836,8 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
 
     .chart-grid {
       display: grid;
-      grid-template-columns: 1.1fr 1.4fr;
-      gap: 16px;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 12px;
     }
 
     .split-bars {
@@ -1006,14 +1006,14 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 14px;
+      padding: 9px 12px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.88);
-      border: 1px solid rgba(148,163,184,0.16);
-      box-shadow: 0 8px 20px rgba(15,23,42,0.05);
+      background: rgba(255,255,255,0.94);
+      border: 1px solid rgba(220,227,248,0.95);
+      box-shadow: 0 8px 20px rgba(15,23,42,0.04);
       color: var(--dark-soft);
       font-weight: 700;
-      font-size: 0.88rem;
+      font-size: 0.84rem;
     }
 
     .mini-chip span:last-child {
@@ -1028,6 +1028,124 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
       font-size: 0.82rem;
       font-weight: 700;
       text-align: right;
+    }
+
+
+    .mobile-section-nav {
+      display: none;
+      position: sticky;
+      top: 10px;
+      z-index: 60;
+      margin: 0 0 14px;
+      padding: 6px;
+      gap: 6px;
+      background: rgba(255,255,255,0.88);
+      border: 1px solid rgba(208,218,244,0.92);
+      border-radius: 18px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 12px 22px rgba(15,23,42,0.05);
+    }
+
+    .mobile-nav-btn {
+      flex: 1;
+      min-height: 40px;
+      border: 1px solid rgba(220,227,248,0.95);
+      background: rgba(255,255,255,0.96);
+      border-radius: 12px;
+      color: var(--dark);
+      font-weight: 800;
+      font-size: 0.84rem;
+      transition: transform var(--motion), background var(--motion), color var(--motion), border-color var(--motion), box-shadow var(--motion);
+    }
+
+    .mobile-nav-btn.active {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 10px 22px rgba(91,108,255,0.24);
+    }
+
+    .section-header {
+      cursor: default;
+    }
+
+    .section-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .section-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(220,227,248,0.95);
+      background: rgba(255,255,255,0.96);
+      color: var(--dark);
+      font-weight: 800;
+      font-size: 0.84rem;
+      box-shadow: 0 8px 20px rgba(15,23,42,0.04);
+      transition: transform var(--motion), background var(--motion), border-color var(--motion), box-shadow var(--motion);
+    }
+
+    .section-toggle:hover {
+      transform: translateY(-1px);
+      border-color: rgba(91,108,255,0.24);
+      box-shadow: 0 12px 24px rgba(15,23,42,0.08);
+    }
+
+    .toggle-icon {
+      display: inline-flex;
+      transition: transform var(--motion);
+      font-size: 0.88rem;
+    }
+
+    .section-body {
+      overflow: hidden;
+      transition: max-height var(--motion), opacity var(--motion), transform var(--motion), margin-top var(--motion);
+      opacity: 1;
+      transform: translateY(0);
+      max-height: none;
+    }
+
+    .collapsible-section.collapsed .section-body {
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
+    }
+
+    .collapsible-section.collapsed .toggle-icon {
+      transform: rotate(-180deg);
+    }
+
+    .chart-tabbar {
+      display: none;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .chart-tab-btn {
+      flex: 1;
+      min-height: 42px;
+      border-radius: 12px;
+      border: 1px solid rgba(203,213,225,0.9);
+      background: rgba(255,255,255,0.94);
+      color: var(--dark);
+      font-weight: 800;
+      font-size: 0.88rem;
+      transition: transform var(--motion), background var(--motion), color var(--motion), box-shadow var(--motion), border-color var(--motion);
+    }
+
+    .chart-tab-btn.active {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 10px 22px rgba(91,108,255,0.22);
     }
 
     @keyframes scanMove {
@@ -1070,32 +1188,89 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
     }
 
     @media (max-width: 820px) {
-      .container { padding: 18px 14px 38px; }
-      .header { margin-bottom: 18px; padding-top: 10px; }
-      .card { padding: 18px; border-radius: 22px; }
+      .container { padding: 14px 12px 30px; }
+      .header { margin-bottom: 12px; padding-top: 6px; }
+      .card { padding: 16px; border-radius: 22px; }
+      .mobile-section-nav {
+        display: flex;
+      }
       .btn-group {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        position: sticky;
-        top: 10px;
-        z-index: 50;
-        padding: 8px;
-        margin-inline: -4px;
-        background: rgba(245,247,255,0.86);
-        backdrop-filter: blur(14px);
-        border-radius: 18px;
+        gap: 8px;
       }
-      .btn { width: 100%; padding: 13px 14px; font-size: 0.9rem; }
+      .btn { width: 100%; padding: 12px 12px; font-size: 0.86rem; }
       .dashboard-table { font-size: 0.82rem; min-width: 1180px; }
       .dashboard-table th, .dashboard-table td { padding: 12px 10px; }
       .modal-content { padding: 24px 18px; margin: 6% auto 10%; width: 94%; border-radius: 22px; }
       .scanner-target { height: 104px; width: 90%; }
       .analytics-filter,
-      .summary-grid,
-      .kpi-grid,
       .chart-grid {
         grid-template-columns: 1fr;
+      }
+      .summary-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        overflow: visible;
+      }
+      .kpi-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        overflow: visible;
+      }
+      .summary-grid > *,
+      .kpi-grid > * {
+        min-width: 0;
+        max-width: 100%;
+      }
+      .summary-card,
+      .kpi-card,
+      .chart-panel {
+        width: 100%;
+        min-width: 0;
+      }
+      .records-section .table-container {
+        max-height: 48vh;
+        overflow: auto;
+      }
+      .records-section #pagination {
+        position: sticky;
+        bottom: 0;
+        padding-top: 12px;
+        background: linear-gradient(180deg, rgba(245,247,255,0) 0%, rgba(245,247,255,0.96) 44%);
+      }
+      .collapsible-section {
+        scroll-margin-top: 86px;
+      }
+      .section-header {
+        align-items: flex-start;
+      }
+      .section-header-actions {
+        width: 100%;
+        justify-content: space-between;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .section-pill {
+        width: 100%;
+        text-align: center;
+      }
+      .section-toggle {
+        display: inline-flex;
+        justify-content: center;
+      }
+      .chart-tabbar {
+        display: flex;
+      }
+      .chart-grid {
+        display: block;
+      }
+      .chart-grid .chart-panel[data-chart-panel] {
+        display: none;
+      }
+      .chart-grid .chart-panel[data-chart-panel].active-chart {
+        display: block;
       }
       .kpi-grid .kpi-card:last-child { grid-column: auto; }
       .selected-header { align-items: flex-start; }
@@ -1113,7 +1288,13 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
       .trend-bar-group { min-width: 28px; }
       .trend-bar { width: 10px; }
       .btn-group { grid-template-columns: 1fr; }
-      .split-bar-value { min-width: 88px; font-size: 0.86rem; }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .summary-card,
+      .kpi-card,
+      .chart-panel { padding: 16px; }
+      .summary-main, .kpi-value { font-size: 1.18rem; }
+      .summary-meta, .kpi-subtext { font-size: 0.86rem; }
+      .split-bar-value { min-width: 88px; font-size: 0.84rem; }
       .control-pill { width: 100%; justify-content: center; }
       .controls-overlay .btn { width: calc(50% - 6px); }
       .toast { bottom: 16px; }
@@ -1135,17 +1316,27 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
   <div class="container">
     <div class="header">
       <h1>📱 Mohsin IMEI Scanner Pro</h1>
-      <p>Advanced IMEI Management System</p>
+      <p>Compact premium IMEI operations and sales analytics</p>
     </div>
 
-    <div class="card">
-      <div class="card-header">
+    <div class="mobile-section-nav" id="mobileSectionNav">
+      <button class="mobile-nav-btn active" data-scroll-target="scannerSection" type="button">Scanner</button>
+      <button class="mobile-nav-btn" data-scroll-target="recordsSection" type="button">Records</button>
+      <button class="mobile-nav-btn" data-scroll-target="dashboardSection" type="button">Dashboard</button>
+    </div>
+
+    <section class="card collapsible-section scanner-section" id="scannerSection" data-section-key="scanner" data-default-open="true">
+      <div class="card-header section-header">
         <div class="card-title">
           <span>🔍</span>
           Smart Scanner
         </div>
+        <button class="section-toggle" type="button" aria-expanded="true">
+          <span class="toggle-label">Collapse</span>
+          <span class="toggle-icon">⌄</span>
+        </button>
       </div>
-
+      <div class="section-body">
       <div class="btn-group">
         <button class="btn btn-warning" id="barcodeModeBtn"><span>📊</span>Barcode Mode</button>
         <button class="btn" id="ocrModeBtn"><span>📷</span>OCR/Text Mode</button>
@@ -1183,13 +1374,21 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-header">
+    </div>
+    </section>
+
+    <section class="card collapsible-section records-section" id="recordsSection" data-section-key="records" data-default-open="false">
+      <div class="card-header section-header">
         <div class="card-title">
           <span>💾</span>
           Saved Records
         </div>
+        <button class="section-toggle" type="button" aria-expanded="false">
+          <span class="toggle-label">Expand</span>
+          <span class="toggle-icon">⌄</span>
+        </button>
       </div>
+      <div class="section-body">
 
       <div class="form-grid" style="position:relative; z-index:1;">
         <div>
@@ -1239,15 +1438,24 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
       <div id="pagination"></div>
     </div>
 
-    <div class="card fade-slide">
-      <div class="card-header">
+    </div>
+    </section>
+
+    <section class="card fade-slide collapsible-section dashboard-section" id="dashboardSection" data-section-key="dashboard" data-default-open="false">
+      <div class="card-header section-header">
         <div class="card-title">
           <span>📈</span>
           Sales Dashboard
         </div>
-        <div class="section-pill" id="dashboardLiveLabel">Live profit &amp; loss overview</div>
+        <div class="section-header-actions">
+          <div class="section-pill" id="dashboardLiveLabel">Compact analytics overview</div>
+          <button class="section-toggle" type="button" aria-expanded="false">
+            <span class="toggle-label">Expand</span>
+            <span class="toggle-icon">⌄</span>
+          </button>
+        </div>
       </div>
-
+      <div class="section-body">
       <div class="analytics-stack">
         <div class="summary-grid">
           <div class="summary-card">
@@ -1335,8 +1543,13 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
             </div>
           </div>
 
+          <div class="chart-tabbar" id="chartTabbar">
+            <button class="chart-tab-btn active" type="button" data-chart-tab="bars">Profit / Loss</button>
+            <button class="chart-tab-btn" type="button" data-chart-tab="trend">Trend</button>
+          </div>
+
           <div class="chart-grid">
-            <div class="chart-panel" style="padding:18px;">
+            <div class="chart-panel active-chart" data-chart-panel="bars" style="padding:18px;">
               <div class="chart-title">Profit vs Loss bars</div>
               <div class="split-bars">
                 <div class="split-bar-row">
@@ -1353,7 +1566,7 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
               <div class="dashboard-note">Bars animate automatically whenever you change the day, month, or year selection.</div>
             </div>
 
-            <div class="chart-panel" style="padding:18px;">
+            <div class="chart-panel" data-chart-panel="trend" style="padding:18px;">
               <div class="chart-title" id="trendChartTitle">Trend bars</div>
               <div class="trend-chart-wrap">
                 <div class="trend-chart" id="trendChart"></div>
@@ -1364,6 +1577,8 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
         </div>
       </div>
     </div>
+      </div>
+    </section>
   </div>
 
   <div id="manualModal" class="modal">
@@ -1523,6 +1738,99 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
     let imeiData = [];
     let editingId = null;
     let lastDetectedSource = 'upload';
+
+    function isMobileLayout() {
+      return window.innerWidth <= 820;
+    }
+
+    function getSectionBody(section) {
+      return section ? section.querySelector('.section-body') : null;
+    }
+
+    function setSectionOpen(section, shouldOpen, immediate = false) {
+      if (!section) return;
+      const body = getSectionBody(section);
+      const toggle = section.querySelector('.section-toggle');
+      if (!body) return;
+
+      const openOnDesktop = !isMobileLayout();
+      const finalOpen = openOnDesktop ? true : shouldOpen;
+      section.classList.toggle('collapsed', !finalOpen);
+      section.dataset.open = finalOpen ? 'true' : 'false';
+
+      if (toggle) {
+        toggle.setAttribute('aria-expanded', String(finalOpen));
+        const label = toggle.querySelector('.toggle-label');
+        if (label) label.textContent = finalOpen ? 'Collapse' : 'Expand';
+      }
+
+      if (!isMobileLayout()) {
+        body.hidden = false;
+        body.style.maxHeight = 'none';
+        body.style.opacity = '1';
+        return;
+      }
+
+      if (finalOpen) {
+        body.hidden = false;
+        body.style.maxHeight = (body.scrollHeight + 24) + 'px';
+        body.style.opacity = '1';
+      } else {
+        if (immediate) {
+          body.hidden = true;
+          body.style.maxHeight = '0px';
+          body.style.opacity = '0';
+        } else {
+          body.hidden = false;
+          body.style.maxHeight = body.scrollHeight + 'px';
+          requestAnimationFrame(() => {
+            body.style.maxHeight = '0px';
+            body.style.opacity = '0';
+          });
+          setTimeout(() => {
+            if (section.dataset.open === 'false') body.hidden = true;
+          }, 340);
+        }
+      }
+    }
+
+    function initCollapsibleSections() {
+      document.querySelectorAll('.collapsible-section').forEach(section => {
+        const defaultOpen = section.dataset.defaultOpen === 'true';
+        setSectionOpen(section, defaultOpen, true);
+      });
+    }
+
+    function openSectionById(sectionId) {
+      const target = document.getElementById(sectionId);
+      if (!target) return;
+      if (isMobileLayout()) {
+        document.querySelectorAll('.collapsible-section').forEach(section => {
+          setSectionOpen(section, section === target, false);
+        });
+      }
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function updateMobileNavState(activeId) {
+      document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.scrollTarget === activeId);
+      });
+    }
+
+    function syncChartPanels(targetTab = 'bars') {
+      const isMobile = isMobileLayout();
+      document.querySelectorAll('.chart-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.chartTab === targetTab);
+      });
+      document.querySelectorAll('[data-chart-panel]').forEach(panel => {
+        if (!isMobile) {
+          panel.classList.add('active-chart');
+        } else {
+          panel.classList.toggle('active-chart', panel.dataset.chartPanel === targetTab);
+        }
+      });
+    }
 
     let toastTimer = null;
 
@@ -1791,7 +2099,7 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
           : String(selectedDate.getFullYear());
 
       document.getElementById('selectedPeriodLabel').textContent = `Showing ${scope} analytics for ${label}`;
-      document.getElementById('dashboardLiveLabel').textContent = `Default cards: Today, This Month, This Year`;
+      document.getElementById('dashboardLiveLabel').textContent = `Default view: Today, Month, Year`;
 
       animateCountText('selectedCount', metrics.count, 'count');
       animateCountText('selectedPurchase', metrics.purchase, 'currency');
@@ -2346,6 +2654,26 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
       URL.revokeObjectURL(url);
     };
 
+    document.querySelectorAll('.section-toggle').forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const section = toggle.closest('.collapsible-section');
+        const isOpen = section?.dataset.open === 'true';
+        setSectionOpen(section, !isOpen, false);
+        if (section?.id) updateMobileNavState(section.id);
+      });
+    });
+
+    document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        updateMobileNavState(btn.dataset.scrollTarget);
+        openSectionById(btn.dataset.scrollTarget);
+      });
+    });
+
+    document.querySelectorAll('.chart-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => syncChartPanels(btn.dataset.chartTab));
+    });
+
     document.getElementById('analyticsScope').addEventListener('change', syncScopeInput);
     document.getElementById('analyticsDay').addEventListener('change', refreshAnalytics);
     document.getElementById('analyticsMonth').addEventListener('change', refreshAnalytics);
@@ -2367,7 +2695,17 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
       }
     });
 
-    window.addEventListener('resize', () => requestAnimationFrame(applyResponsiveTableState));
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        requestAnimationFrame(() => {
+          initCollapsibleSections();
+          syncChartPanels(document.querySelector('.chart-tab-btn.active')?.dataset.chartTab || 'bars');
+          applyResponsiveTableState();
+        });
+      }, 120);
+    });
 
     window.onload = () => {
       const now = new Date();
@@ -2375,6 +2713,9 @@ Purchase/Selling Amounts, Animated Profit/Loss Dashboard
       document.getElementById('analyticsMonth').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
       document.getElementById('analyticsYear').innerHTML = `<option value="${now.getFullYear()}">${now.getFullYear()}</option>`;
       document.getElementById('analyticsYear').value = String(now.getFullYear());
+      initCollapsibleSections();
+      syncChartPanels('bars');
+      updateMobileNavState('scannerSection');
       loadDashboard();
       syncScopeInput();
     };
